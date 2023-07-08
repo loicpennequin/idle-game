@@ -1,0 +1,20 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "dev:server": "npm run dev --workspace @daria/server",
+    "dev:client": "npm run dev --workspace @daria/client",
+    "dev": "turbo run dev",
+    "build:server": "npm run build --workspace @daria/server",
+    "build:client": "npm run build --workspace @daria/client"
+  },
+  "workspaces": {
+    "packages": [
+      "libs/*",
+      "apps/*"
+    ]
+  },
+  "dependencies": {
+    "turbo": "^1.7.0"
+  }
+}
