@@ -9,12 +9,8 @@ declare module '@ts-rest/express' {
   }
 }
 
-export const createRouter = () => {
-  const s = initServer();
+const s = initServer();
 
-  return s.router(contract, {
-    todo: todoRouter
-  });
-};
-
-export type Router = ReturnType<ReturnType<typeof initServer>['router']>;
+export const router = s.router(contract, {
+  todo: todoRouter
+});

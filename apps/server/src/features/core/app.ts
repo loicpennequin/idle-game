@@ -6,18 +6,16 @@ import { ERROR_KINDS, contract } from '@daria/shared';
 import { errorFactory } from '../../utils/errorFactory';
 import { CorsMiddleware } from './middlewares/cors.middleware';
 import { RequestScopeMiddleware } from './middlewares/requestScope.middleware';
-import { Router } from './router';
+import { router } from './router';
 
 export type App = Express;
 
 export const createApp = ({
   corsMiddleware,
-  requestScopeMiddleware,
-  router
+  requestScopeMiddleware
 }: {
   corsMiddleware: CorsMiddleware;
   requestScopeMiddleware: RequestScopeMiddleware;
-  router: Router;
 }): App => {
   const app = express();
 

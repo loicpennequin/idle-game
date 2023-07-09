@@ -31,5 +31,14 @@ export const todoRouter = s.router(todoContract, {
       container.todoMapper.toResponseArray,
       container.errorMapper.toResponse
     );
+  },
+
+  async updateCompleted({ params, body, req: { container } }) {
+    return toResponse(
+      await container.toggleTodoUseCase(params.id, body.completed),
+      HTTP_STATUS_CODES.OK,
+      container.todoMapper.toResponse,
+      container.errorMapper.toResponse
+    );
   }
 });

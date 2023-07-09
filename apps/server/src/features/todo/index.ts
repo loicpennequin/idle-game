@@ -4,6 +4,7 @@ import { prismaTodoRepository } from './prismaTodo.repository';
 import { createTodoUseCase } from './usecases/createTodo.usecase';
 import { getTodoUseCase } from './usecases/getTodo.usecase';
 import { getAllTodosUseCase } from './usecases/getallTodos.usecase';
+import { toggleTodoUseCase } from './usecases/toggleTodo.usercase';
 
 export const todoProviders = {
   todoRepo: asFunction(prismaTodoRepository),
@@ -11,5 +12,6 @@ export const todoProviders = {
 
   getAllTodosUseCase: asFunction(getAllTodosUseCase),
   getTodoUseCase: asFunction(getTodoUseCase),
-  createTodoUseCase: asFunction(createTodoUseCase)
+  createTodoUseCase: asFunction(createTodoUseCase),
+  toggleTodoUseCase: asFunction(toggleTodoUseCase)
 };

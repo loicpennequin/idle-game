@@ -10,6 +10,8 @@ export const todoRepository = ({ apiClient }: { apiClient: ApiClient }) => {
   return {
     getAll: () => apiHandler(apiClient.todo.getAll),
     getById: (id: UUID) => apiHandler(apiClient.todo.getById, { params: { id } }),
-    create: (text: string) => apiHandler(apiClient.todo.create, { body: { text } })
+    create: (text: string) => apiHandler(apiClient.todo.create, { body: { text } }),
+    updateCompleted: ({ id, completed }: { id: UUID; completed: boolean }) =>
+      apiHandler(apiClient.todo.updateCompleted, { params: { id }, body: { completed } })
   };
 };
