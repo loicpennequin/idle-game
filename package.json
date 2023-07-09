@@ -9,7 +9,8 @@
     "build:client": "yarn workspace @daria/client build",
     "db:start": "docker-compose up -d",
     "db:stop": "docker-compose down",
-    "db:sync": "yarn workspace @daria/server db:sync"
+    "db:sync": "yarn workspace @daria/server db:sync",
+    "db:ui": "yarn workspace @daria/server db:ui"
   },
   "workspaces": {
     "packages": [

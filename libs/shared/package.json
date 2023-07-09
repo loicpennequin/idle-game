@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "./src/index.ts",
   "devDependencies": {
-    "typescript": "^5.0.4",
-    "eslint-config-daria": "*"
+    "eslint-config-daria": "*",
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "@ts-rest/core": "^3.25.1",
+    "awilix": "^8.0.1",
     "vitest": "^0.31.4",
     "zod": "^3.21.4"
   },

@@ -16,7 +16,10 @@ export default defineConfig({
     }),
 
     vue({
-      reactivityTransform: true
+      reactivityTransform: true,
+      script: {
+        defineModel: true
+      }
     }),
 
     AutoImport({

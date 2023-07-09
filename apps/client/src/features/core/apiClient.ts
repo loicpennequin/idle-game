@@ -1,10 +1,11 @@
-import { contract } from '@daria/shared';
-import { initClient } from '@ts-rest/core';
+import { contract, type Contract } from '@daria/shared';
+import { initClient, type InitClientArgs } from '@ts-rest/core';
 import { FetchError, ofetch } from 'ofetch';
-import type { ApiClient } from './interfaces/container';
+
+export type ApiClient = ReturnType<typeof initClient<Contract, InitClientArgs>>;
 
 export const apiClient: ApiClient = initClient(contract, {
-  baseUrl: 'http://localhost:5000',
+  baseUrl: import.meta.env.VITE_API_URL,
   baseHeaders: {},
   api: async args => {
     try {

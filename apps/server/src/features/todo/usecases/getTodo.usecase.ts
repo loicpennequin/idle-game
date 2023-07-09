@@ -3,7 +3,7 @@ import { wrapUseCase } from '../../../utils/useCase';
 import { errorFactory } from '../../../utils/errorFactory';
 import { NotFoundError, UnexpectedError } from '../../../utils/errorFactory';
 import { Todo } from '../entities/todo.entity';
-import { TodoRepository } from '../repository/prismaTodo.repository';
+import { TodoRepository } from '../prismaTodo.repository';
 
 export type GetTodoUseCaseError = NotFoundError | UnexpectedError;
 

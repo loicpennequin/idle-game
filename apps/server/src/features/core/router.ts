@@ -1,16 +1,20 @@
 import { contract } from '@daria/shared';
 import { initServer } from '@ts-rest/express';
-import { Container } from './interfaces/container';
 import { todoRouter } from '../todo/todo.router';
+import { RequestScopedContainer } from '../../container';
 
 declare module '@ts-rest/express' {
   interface TsRestRequest {
-    container: Container['cradle'];
+    container: RequestScopedContainer['cradle'];
   }
 }
 
-const s = initServer();
+export const createRouter = () => {
+  const s = initServer();
 
-export const router = s.router(contract, {
-  todo: todoRouter
-});
+  return s.router(contract, {
+    todo: todoRouter
+  });
+};
+
+export type Router = ReturnType<ReturnType<typeof initServer>['router']>;

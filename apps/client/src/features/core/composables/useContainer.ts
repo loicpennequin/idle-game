@@ -1,6 +1,8 @@
+import type { Container } from '@/container';
 import type { InjectionKey } from 'vue';
-import type { Container } from '../interfaces/container';
 
-export const CONTAINER_INJECTION_KEY = Symbol('container') as InjectionKey<Container>;
+export const CONTAINER_INJECTION_KEY = Symbol('container') as InjectionKey<
+  Container['cradle']
+>;
 
 export const useContainer = () => useSafeInject(CONTAINER_INJECTION_KEY);

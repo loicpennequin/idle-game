@@ -2,7 +2,7 @@ import { Either } from '@daria/shared';
 import { wrapUseCase } from '../../../utils/useCase';
 import { UnexpectedError } from '../../../utils/errorFactory';
 import { Todo } from '../entities/todo.entity';
-import { TodoRepository } from '../repository/prismaTodo.repository';
+import { TodoRepository } from '../prismaTodo.repository';
 
 export type GetAllTodosUseCaseError = UnexpectedError;
 

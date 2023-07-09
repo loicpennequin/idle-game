@@ -1,4 +1,9 @@
-import { AwilixContainer, createContainer, Resolver, ResolveOptions } from 'awilix';
+import {
+  type AwilixContainer,
+  createContainer,
+  type Resolver,
+  type ResolveOptions
+} from 'awilix';
 
 type ContainerDefinition = Record<string, Resolver<unknown>>;
 type ExtractResolverType<T> = T extends Resolver<infer X> ? X : null;

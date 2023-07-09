@@ -1,5 +1,5 @@
 import { TodoResponse } from '@daria/shared';
-import { Todo } from '../entities/todo.entity';
+import { Todo } from './entities/todo.entity';
 
 export type TodoMapper = {
   toResponse(todo: Todo): TodoResponse;

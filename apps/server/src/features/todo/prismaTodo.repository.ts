@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { UUID } from '@daria/shared';
-import { Todo } from '../entities/todo.entity';
+import { Todo } from './entities/todo.entity';
 import { Nullable } from '@daria/shared';
 
 export type TodoRepository = {

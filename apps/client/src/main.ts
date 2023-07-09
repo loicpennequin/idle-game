@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router/auto';
-import { container } from './features/core/container';
+import { container } from './container';
 import App from './App.vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 
@@ -12,6 +12,6 @@ app.use(
     history: createWebHistory()
   })
 );
-app.provide(CONTAINER_INJECTION_KEY, container);
+app.provide(CONTAINER_INJECTION_KEY, container.cradle);
 
 app.mount('#app');

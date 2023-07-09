@@ -3,19 +3,21 @@ import express, { Express } from 'express';
 import bodyParser from 'body-parser';
 import { createExpressEndpoints } from '@ts-rest/express';
 import { ERROR_KINDS, contract } from '@daria/shared';
-import { router } from './features/core/router';
-import { errorFactory } from './utils/errorFactory';
-import { CorsMiddleware } from './features/core/middlewares/cors.middleware';
-import { RequestScopeMiddleware } from './features/core/middlewares/requestScope.middleware';
+import { errorFactory } from '../../utils/errorFactory';
+import { CorsMiddleware } from './middlewares/cors.middleware';
+import { RequestScopeMiddleware } from './middlewares/requestScope.middleware';
+import { Router } from './router';
 
 export type App = Express;
 
 export const createApp = ({
   corsMiddleware,
-  requestScopeMiddleware
+  requestScopeMiddleware,
+  router
 }: {
   corsMiddleware: CorsMiddleware;
   requestScopeMiddleware: RequestScopeMiddleware;
+  router: Router;
 }): App => {
   const app = express();
 

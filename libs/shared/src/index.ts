@@ -15,10 +15,6 @@ export const contract = c.router(
 export type Contract = typeof contract;
 
 export * from './types/utils';
-export * from './utils/assertions';
-export * from './utils/helpers';
-export * from './utils/constants';
-export * from './utils/either';
-
+export * from './utils';
 export * from './todo';
 export * from './core';
