@@ -11,8 +11,8 @@ export const createSocket = ({
   queryClient: QueryClient;
 }) => {
   const socket: Socket<IoEvents, {}> = io(import.meta.env.VITE_API_URL, {
-    autoConnect: true,
-    transports: ['websocket']
+    transports: ['websocket'],
+    autoConnect: false
     // auth: cb => cb({ token: authService.getToken() })
   });
 

@@ -20,6 +20,11 @@ export const createIo = ({ config, server }: { server: Server; config: Config })
     pingInterval: 10_000
   });
 
+  io.on('connection', socket => {
+    socket.on('disconnect', () => {
+      console.log('socket disconnected', socket.id);
+    });
+  });
   return io;
 };
 

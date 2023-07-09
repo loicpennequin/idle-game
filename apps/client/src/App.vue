@@ -4,6 +4,8 @@ import { RouterView } from 'vue-router';
 
 const error = ref<Nullable<string>>();
 
+const { socket } = useContainer();
+socket.connect();
 onErrorCaptured(err => {
   error.value = err.message;
 });
