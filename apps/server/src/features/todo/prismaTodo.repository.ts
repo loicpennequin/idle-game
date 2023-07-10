@@ -1,7 +1,8 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { UUID } from '@daria/shared';
-import { Todo } from './entities/todo.entity';
-import { Nullable } from '@daria/shared';
+import { Nullable, UUID } from '@daria/shared';
+import { PrismaError } from 'prisma-error-enum';
+import { Todo } from './todo.entity';
+import * as O from 'fp-ts/Option';
 import { errorFactory } from '../../utils/errorFactory';
 
 export type TodoRepository = {
@@ -23,8 +24,9 @@ export const prismaTodoRepository = ({
       });
     },
 
-    findById(id) {
-      return prisma.todo.findUnique({ where: { id } });
+    async findById(id) {
+      const todo = await prisma.todo.findUnique({ where: { id } });
+      return todo;
     },
 
     findAll() {
@@ -33,13 +35,17 @@ export const prismaTodoRepository = ({
 
     async updateCompletedById(id, completed) {
       try {
-        return await prisma.todo.update({
+        const todo = await prisma.todo.update({
           where: { id },
           data: { completed }
         });
+
+        return todo;
       } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === 'P2025') throw errorFactory.notFound();
+          if (err.code === PrismaError.RecordsNotFound) {
+            throw errorFactory.notFound();
+          }
         }
 
         throw err;

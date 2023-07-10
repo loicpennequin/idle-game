@@ -22,7 +22,8 @@ export class AppError extends Error {
     public message: string,
     public statusCode: HttpStatusCode,
     public kind: ErrorKind,
-    public meta: Nullable<AnyObject>
+    public meta: Nullable<AnyObject>,
+    public cause?: Error
   ) {
     super(message);
   }
@@ -41,9 +42,16 @@ export const createAppError =
   ({
     meta,
     message,
-    kind
-  }: { meta?: AnyObject; message?: string; kind?: ErrorKind } = {}): T =>
-    new AppError(message ?? defaultMessage, statusCode, kind ?? defaultKind, meta) as T;
+    kind,
+    cause
+  }: { meta?: AnyObject; message?: string; kind?: ErrorKind; cause?: Error } = {}): T =>
+    new AppError(
+      message ?? defaultMessage,
+      statusCode,
+      kind ?? defaultKind,
+      meta,
+      cause
+    ) as T;
 
 export type UnprocessableError = AppError & {
   statusCode: 422;

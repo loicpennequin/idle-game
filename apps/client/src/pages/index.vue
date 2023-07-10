@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { TodoResponse } from '@daria/shared';
 
-const { queryKeys, todoRepo } = useContainer();
+const { queryKeys, todoRepo, todoSubscriber } = useContainer();
 
-const {
-  data: todos,
-  suspense,
-  refetch
-} = useQuery({
+const unsubscribe = todoSubscriber.subscribe();
+onBeforeUnmount(unsubscribe);
+
+const { data: todos, suspense } = useQuery({
   ...queryKeys.todo.list,
   queryFn: todoRepo.getAll
 });

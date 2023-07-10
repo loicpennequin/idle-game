@@ -1,6 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { ErrorResponse } from '../core';
-import { CreateTodoDto, TodoResponse, UpdateTodoCompletedDto } from './todo.schemas';
+import { TodoResponse } from './todo.schemas';
+import { z } from 'zod';
 
 const c = initContract();
 
@@ -13,7 +14,9 @@ export const todoContract = c.router({
       400: ErrorResponse,
       500: ErrorResponse
     },
-    body: CreateTodoDto
+    body: z.object({
+      text: z.string()
+    })
   },
   getById: {
     method: 'GET',
@@ -40,7 +43,9 @@ export const todoContract = c.router({
       404: ErrorResponse,
       500: ErrorResponse
     },
-    body: UpdateTodoCompletedDto
+    body: z.object({
+      completed: z.boolean()
+    })
   }
 });
 

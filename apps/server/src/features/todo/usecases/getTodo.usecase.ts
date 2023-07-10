@@ -2,8 +2,8 @@ import { Either, isDefined, UUID } from '@daria/shared';
 import { wrapUseCase } from '../../../utils/useCase';
 import { errorFactory } from '../../../utils/errorFactory';
 import { NotFoundError, UnexpectedError } from '../../../utils/errorFactory';
-import { Todo } from '../entities/todo.entity';
 import { TodoRepository } from '../prismaTodo.repository';
+import { Todo } from '../todo.entity';
 
 export type GetTodoUseCaseError = NotFoundError | UnexpectedError;
 
