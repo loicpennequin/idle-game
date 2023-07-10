@@ -1,5 +1,5 @@
-import { AnyObject, Values, Nullable } from '@daria/shared';
-import { ERROR_KINDS, ErrorKind } from '@daria/shared';
+import { ERROR_KINDS, ErrorKind, AnyObject, Values, Nullable } from '@daria/shared';
+import { ErrorHttpStatusCode } from '@ts-rest/core';
 
 export const HTTP_STATUS_CODES = {
   OK: 200,
@@ -20,7 +20,7 @@ export class AppError extends Error {
 
   constructor(
     public message: string,
-    public statusCode: HttpStatusCode,
+    public statusCode: HttpStatusCode & ErrorHttpStatusCode,
     public kind: ErrorKind,
     public meta: Nullable<AnyObject>,
     public cause?: Error
@@ -35,7 +35,7 @@ export const isAppError = (x: unknown): x is AppError => {
 
 export const createAppError =
   <T = AppError>(
-    statusCode: HttpStatusCode,
+    statusCode: HttpStatusCode & ErrorHttpStatusCode,
     defaultMessage: string,
     defaultKind: ErrorKind
   ) =>

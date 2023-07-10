@@ -2,8 +2,8 @@ import { Express } from 'express';
 import { asValue } from 'awilix';
 import { TypedAwilixContainer, createTypedContainer } from '@daria/shared';
 import { config } from './config';
-import { coreProviders } from './features/core';
-import { todoProviders } from './features/todo';
+import { coreProviders } from './features/core/core.providers';
+import { todoProviders } from './features/todo/todo.providers';
 
 const dependencies = {
   config: asValue(config),
