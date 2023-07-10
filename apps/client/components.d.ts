@@ -10,5 +10,7 @@ declare module 'vue' {
     QueryLoader: typeof import('./src/features/core/components/QueryLoader.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TodoForm: typeof import('./src/features/todo/components/TodoForm.vue')['default']
+    TodoList: typeof import('./src/features/todo/components/TodoList.vue')['default']
   }
 }

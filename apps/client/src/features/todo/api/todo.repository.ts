@@ -1,12 +1,23 @@
 import type { ApiClient } from '@/features/core/apiClient';
 import { apiHandler } from '@/features/core/utils/is-api-error';
-import type { UUID } from '@daria/shared';
+import type { TodoResponse, UUID } from '@daria/shared';
 
 export type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
 
-export const todoRepository = ({ apiClient }: { apiClient: ApiClient }) => {
+export type TodoRepository = {
+  getAll: () => Promise<TodoResponse[]>;
+  getById: (id: UUID) => Promise<TodoResponse>;
+  create: (text: string) => Promise<TodoResponse>;
+  updateCompleted: (arg: { id: UUID; completed: boolean }) => Promise<TodoResponse>;
+};
+
+export const todoRepository = ({
+  apiClient
+}: {
+  apiClient: ApiClient;
+}): TodoRepository => {
   return {
     getAll: () => apiHandler(apiClient.todo.getAll),
     getById: (id: UUID) => apiHandler(apiClient.todo.getById, { params: { id } }),
