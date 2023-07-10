@@ -1,26 +1,14 @@
-import { Either, isDefined, UUID } from '@daria/shared';
-import { wrapUseCase } from '../../../utils/useCase';
-import { errorFactory } from '../../../utils/errorFactory';
+import { UUID } from '@daria/shared';
 import { NotFoundError, UnexpectedError } from '../../../utils/errorFactory';
 import { TodoRepository } from '../prismaTodo.repository';
 import { Todo } from '../todo.entity';
+import * as TE from 'fp-ts/TaskEither';
 
 export type GetTodoUseCaseError = NotFoundError | UnexpectedError;
 
-export type GetTodoUseCase = (id: UUID) => Promise<Either<GetTodoUseCaseError, Todo>>;
+export type GetTodoUseCase = (id: UUID) => TE.TaskEither<GetTodoUseCaseError, Todo>;
 
-export const getTodoUseCase = ({
-  todoRepo
-}: {
-  todoRepo: TodoRepository;
-}): GetTodoUseCase => {
-  return wrapUseCase(async (id: UUID) => {
-    const todo = await todoRepo.findById(id);
-
-    if (!isDefined(todo)) {
-      return Either.left(errorFactory.notFound());
-    }
-
-    return Either.right(todo);
-  });
-};
+export const getTodoUseCase =
+  ({ todoRepo }: { todoRepo: TodoRepository }): GetTodoUseCase =>
+  input =>
+    todoRepo.findById(input);

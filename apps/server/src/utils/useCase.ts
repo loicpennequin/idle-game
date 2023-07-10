@@ -37,7 +37,7 @@ export const toResponse = <
   result: TEither,
   successCode: TStatus,
   mapSuccess: TSuccessMapper,
-  mapError: (error: InferLeft<TEither>) => ErrorResponse = identity
+  mapError: (error: InferLeft<TEither>) => ErrorResponse
 ) => {
   return result.fold<
     | {

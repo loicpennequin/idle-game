@@ -1,44 +1,74 @@
 import { todoContract } from '@daria/shared';
 import { initServer } from '@ts-rest/express';
-import { toResponse } from '../../utils/useCase';
 import { HTTP_STATUS_CODES } from '../../utils/errorFactory';
+import { pipe } from 'fp-ts/function';
+import { execute } from '../../utils/helpers';
+import * as TE from 'fp-ts/TaskEither';
 
 const s = initServer();
 
 export const todoRouter = s.router(todoContract, {
-  async create({ body, req: { container } }) {
-    return toResponse(
-      await container.createTodoUseCase(body),
-      HTTP_STATUS_CODES.CREATED,
-      container.todoMapper.toResponse,
-      container.errorMapper.toResponse
-    );
-  },
+  create: ({ body, req: { container } }) =>
+    pipe(
+      container.createTodoUseCase(body),
+      TE.matchW(
+        err => ({
+          status: err.statusCode,
+          body: container.errorMapper.toResponse(err)
+        }),
+        result => ({
+          status: HTTP_STATUS_CODES.CREATED,
+          body: container.todoMapper.toResponse(result)
+        })
+      ),
+      execute
+    ),
 
-  async getById({ params, req: { container } }) {
-    return toResponse(
-      await container.getTodoUseCase(params.id),
-      HTTP_STATUS_CODES.OK,
-      container.todoMapper.toResponse,
-      container.errorMapper.toResponse
-    );
-  },
+  getById: ({ params, req: { container } }) =>
+    pipe(
+      container.getTodoUseCase(params.id),
+      TE.matchW(
+        err => ({
+          status: err.statusCode,
+          body: container.errorMapper.toResponse(err)
+        }),
+        result => ({
+          status: HTTP_STATUS_CODES.OK,
+          body: container.todoMapper.toResponse(result)
+        })
+      ),
+      execute
+    ),
 
-  async getAll({ req: { container } }) {
-    return toResponse(
-      await container.getAllTodosUseCase(),
-      HTTP_STATUS_CODES.OK,
-      container.todoMapper.toResponseArray,
-      container.errorMapper.toResponse
-    );
-  },
+  getAll: ({ req: { container } }) =>
+    pipe(
+      container.getAllTodosUseCase(),
+      TE.matchW(
+        err => ({
+          status: err.statusCode,
+          body: container.errorMapper.toResponse(err)
+        }),
+        result => ({
+          status: HTTP_STATUS_CODES.OK,
+          body: container.todoMapper.toResponseArray(result)
+        })
+      ),
+      execute
+    ),
 
-  async updateCompleted({ params, body, req: { container } }) {
-    return toResponse(
-      await container.toggleTodoUseCase(params.id, body.completed),
-      HTTP_STATUS_CODES.OK,
-      container.todoMapper.toResponse,
-      container.errorMapper.toResponse
-    );
-  }
+  updateCompleted: ({ params, body, req: { container } }) =>
+    pipe(
+      container.toggleTodoUseCase(params.id, body.completed),
+      TE.matchW(
+        err => ({
+          status: err.statusCode,
+          body: container.errorMapper.toResponse(err)
+        }),
+        result => ({
+          status: HTTP_STATUS_CODES.OK,
+          body: container.todoMapper.toResponse(result)
+        })
+      ),
+      execute
+    )
 });

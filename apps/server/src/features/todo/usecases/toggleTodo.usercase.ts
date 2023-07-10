@@ -1,4 +1,7 @@
 import { Either, TODO_EVENTS, UUID } from '@daria/shared';
+import * as TE from 'fp-ts/TaskEither';
+import * as IO from 'fp-ts/IO';
+import { pipe } from 'fp-ts/function';
 import { wrapUseCase } from '../../../utils/useCase';
 import {
   NotFoundError,
@@ -15,7 +18,7 @@ export type ToggleTodoUseCaseError = UnexpectedError | NotFoundError;
 export type ToggleTodoUseCase = (
   id: UUID,
   completed: boolean
-) => Promise<Either<ToggleTodoUseCaseError, Todo>>;
+) => TE.TaskEither<ToggleTodoUseCaseError, Todo>;
 
 type Dependencies = {
   todoRepo: TodoRepository;
@@ -28,15 +31,12 @@ export const toggleTodoUseCase = ({
   io,
   todoMapper
 }: Dependencies): ToggleTodoUseCase => {
-  return wrapUseCase(async (id: UUID, completed: boolean) => {
-    const todo = await todoRepo.updateCompletedById(id, completed);
-
-    if (!todo) {
-      return Either.left(errorFactory.notFound());
-    }
-
-    io.emit(TODO_EVENTS.TODO_UPDATED, todoMapper.toResponse(todo));
-
-    return Either.right(todo);
-  });
+  return (id, completed) =>
+    pipe(
+      todoRepo.updateCompletedById(id, completed),
+      TE.flatMapIO(todo => {
+        io.emit(TODO_EVENTS.TODO_UPDATED, todoMapper.toResponse(todo));
+        return IO.of(todo);
+      })
+    );
 };

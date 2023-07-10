@@ -1,15 +1,21 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-import { Nullable, UUID } from '@daria/shared';
-import { PrismaError } from 'prisma-error-enum';
+import { PrismaClient } from '@prisma/client';
+import { UUID } from '@daria/shared';
 import { Todo } from './todo.entity';
 import * as O from 'fp-ts/Option';
-import { errorFactory } from '../../utils/errorFactory';
+import * as E from 'fp-ts/Either';
+import * as TE from 'fp-ts/TaskEither';
+import { pipe, flow } from 'fp-ts/function';
+import { handlePrismaNotFound, handlePrismaUnexpected } from '../../utils/prisma';
+import { NotFoundError, UnexpectedError, errorFactory } from '../../utils/errorFactory';
 
 export type TodoRepository = {
-  findAll(): Promise<Todo[]>;
-  findById(id: UUID): Promise<Nullable<Todo>>;
-  create({ text }: { text: string }): Promise<Todo>;
-  updateCompletedById(id: UUID, completed: boolean): Promise<Nullable<Todo>>;
+  findAll(): TE.TaskEither<UnexpectedError, Todo[]>;
+  findById(id: UUID): TE.TaskEither<UnexpectedError | NotFoundError, Todo>;
+  create({ text }: { text: string }): TE.TaskEither<UnexpectedError, Todo>;
+  updateCompletedById(
+    id: UUID,
+    completed: boolean
+  ): TE.TaskEither<UnexpectedError | NotFoundError, Todo>;
 };
 
 export const prismaTodoRepository = ({
@@ -18,38 +24,33 @@ export const prismaTodoRepository = ({
   prisma: PrismaClient;
 }): TodoRepository => {
   return {
-    create({ text }) {
-      return prisma.todo.create({
-        data: { text, completed: false }
-      });
-    },
+    create: TE.tryCatchK(
+      ({ text }) =>
+        prisma.todo.create({
+          data: { text, completed: false }
+        }),
+      handlePrismaUnexpected
+    ),
 
-    async findById(id) {
-      const todo = await prisma.todo.findUnique({ where: { id } });
-      return todo;
-    },
+    findById: id =>
+      pipe(
+        id,
+        TE.tryCatchK(
+          id => prisma.todo.findUnique({ where: { id } }),
+          err => pipe(err, handlePrismaUnexpected)
+        ),
+        TE.matchEW(TE.left, TE.fromNullable(errorFactory.notFound()))
+      ),
 
-    findAll() {
-      return prisma.todo.findMany();
-    },
+    findAll: TE.tryCatchK(() => prisma.todo.findMany(), handlePrismaUnexpected),
 
-    async updateCompletedById(id, completed) {
-      try {
-        const todo = await prisma.todo.update({
+    updateCompletedById: TE.tryCatchK(
+      (id, completed) =>
+        prisma.todo.update({
           where: { id },
           data: { completed }
-        });
-
-        return todo;
-      } catch (err) {
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === PrismaError.RecordsNotFound) {
-            throw errorFactory.notFound();
-          }
-        }
-
-        throw err;
-      }
-    }
+        }),
+      err => pipe(err, handlePrismaNotFound, handlePrismaUnexpected)
+    )
   };
 };
