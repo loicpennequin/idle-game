@@ -9,7 +9,7 @@
     "db:stop": "yarn server db:stop",
     "db:sync": "yarn server db:sync",
     "db:ui": "yarn server db:ui",
-    "build": "yarn client build && yarn server build && shx cp -r ./apps/client/dist ./apps/server/public/",
+    "build": "turbo run build && shx cp -r ./apps/client/dist ./apps/server/public/",
     "start": "yarn server start"
   },
   "workspaces": {
