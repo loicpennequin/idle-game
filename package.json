@@ -2,15 +2,15 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "dev:server": "yarn workspace @daria/server dev",
-    "dev:client": "yarn workspace @daria/client dev",
+    "client": "yarn workspace @daria/client",
+    "server": "yarn workspace @daria/server",
     "dev": "turbo run dev",
-    "build:server": "yarn workspace @daria/server build",
-    "build:client": "yarn workspace @daria/client build",
-    "db:start": "docker-compose up -d",
-    "db:stop": "docker-compose down",
-    "db:sync": "yarn workspace @daria/server db:sync",
-    "db:ui": "yarn workspace @daria/server db:ui"
+    "db:start": "yarn serber db:start",
+    "db:stop": "yarn server db:stop",
+    "db:sync": "yarn server db:sync",
+    "db:ui": "yarn server db:ui",
+    "build": "yarn client build && yarn server build && shx cp -r ./apps/client/dist ./apps/server/public/",
+    "start": "yarn server start"
   },
   "workspaces": {
     "packages": [
@@ -19,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "shx": "^0.3.4",
     "turbo": "^1.7.0"
   }
 }

@@ -1,7 +1,15 @@
 import { asValue } from 'awilix';
 import { TsRestRequestHandler } from '@ts-rest/express';
 import { Contract } from '@daria/shared';
-import { container } from '../../../container';
+import { RequestScopedContainer, container } from '../../../container';
+
+declare global {
+  namespace Express {
+    interface Request {
+      container: RequestScopedContainer['cradle'];
+    }
+  }
+}
 
 export type RequestScopeMiddleware = TsRestRequestHandler<Contract>;
 

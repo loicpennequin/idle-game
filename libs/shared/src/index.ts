@@ -8,7 +8,8 @@ export const contract = c.router(
     todo: todoContract
   },
   {
-    strictStatusCodes: true
+    strictStatusCodes: true,
+    pathPrefix: '/api'
   }
 );
 

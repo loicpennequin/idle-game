@@ -1,9 +1,8 @@
 import { contract, type Contract } from '@daria/shared';
 import { initClient, type InitClientArgs } from '@ts-rest/core';
-import { FetchError, ofetch } from 'ofetch';
+// import { FetchError, ofetch } from 'ofetch';
 
 export type ApiClient = ReturnType<typeof initClient<Contract, InitClientArgs>>;
-
 export const apiClient: ApiClient = initClient(contract, {
   baseUrl: import.meta.env.VITE_API_URL,
   baseHeaders: {}
