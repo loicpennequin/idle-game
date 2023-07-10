@@ -1,10 +1,6 @@
 import type { ApiClient } from '@/features/core/apiClient';
-import { apiHandler } from '@/features/core/utils/is-api-error';
+import { apiHandler } from '@/features/core/utils/api-helpers';
 import type { TodoResponse, UUID } from '@daria/shared';
-
-export type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
 
 export type TodoRepository = {
   getAll: () => Promise<TodoResponse[]>;

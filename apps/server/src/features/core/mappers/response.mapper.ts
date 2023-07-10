@@ -6,10 +6,10 @@ import { pipe } from 'fp-ts/function';
 import { ErrorResponse } from '@daria/shared';
 
 export type ResponseMapper = <
-  TStatus extends HttpStatusCode,
   TLeft extends AppError,
   TRight,
-  TBody
+  TBody,
+  TStatus extends HttpStatusCode
 >(
   statusCode: TStatus,
   mapper: (result: TRight) => TBody

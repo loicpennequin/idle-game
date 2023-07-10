@@ -1,4 +1,4 @@
-import { type AnyObject, curry } from '@daria/shared';
+import { type AnyObject } from '@daria/shared';
 import type { HTTPStatusCode, ErrorHttpStatusCode } from '@ts-rest/core';
 
 export const isApiError = <T extends { status: HTTPStatusCode }>(

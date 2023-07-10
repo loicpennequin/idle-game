@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { TodoResponse } from '@daria/shared';
-
 const { queryKeys, todoApi } = useContainer();
-
-const unsubscribe = todoApi.subscribe();
-onBeforeUnmount(unsubscribe);
 
 const { data: todos, suspense } = useQuery({
   ...queryKeys.todo.list,
@@ -15,9 +10,9 @@ const { mutate: toggle, isLoading: isToggling } = useMutation({
   mutationFn: todoApi.updateCompleted
 });
 
-const handleChange = (todo: TodoResponse) => {
-  toggle({ id: todo.id, completed: !todo.completed });
-};
+const unsubscribe = todoApi.subscribe();
+onBeforeUnmount(unsubscribe);
+
 await suspense();
 </script>
 
@@ -29,7 +24,7 @@ await suspense();
           type="checkbox"
           :checked="todo.completed"
           :disabled="isToggling"
-          @change="handleChange(todo)"
+          @change="toggle({ id: todo.id, completed: !todo.completed })"
         />
         {{ todo.text }}
       </label>
