@@ -1,18 +1,18 @@
 import { initContract } from '@ts-rest/core';
 import { ErrorResponse } from '../core';
 import { z } from 'zod';
-import { LoginResponse } from './auth.schemas';
+import { UserResponse } from './user.schemas';
 
 const c = initContract();
 
-export const todoContract = c.router(
+export const userContract = c.router(
   {
     login: {
       method: 'POST',
-      path: '/auth/login',
+      path: '/user',
       responses: {
-        200: LoginResponse,
-        401: ErrorResponse,
+        200: UserResponse,
+        400: ErrorResponse,
         500: ErrorResponse
       },
       body: z.object({
@@ -25,4 +25,4 @@ export const todoContract = c.router(
   }
 );
 
-export type TodoContract = typeof todoContract;
+export type UserContract = typeof userContract;

@@ -9,7 +9,7 @@ export const todoContract = c.router(
   {
     create: {
       method: 'POST',
-      path: '/todos',
+      path: '/',
       responses: {
         201: TodoResponse,
         400: ErrorResponse,
@@ -21,7 +21,7 @@ export const todoContract = c.router(
     },
     getById: {
       method: 'GET',
-      path: `/todos/:id`,
+      path: `/:id`,
       responses: {
         200: TodoResponse,
         404: ErrorResponse,
@@ -30,7 +30,7 @@ export const todoContract = c.router(
     },
     getAll: {
       method: 'GET',
-      path: `/todos`,
+      path: `/`,
       responses: {
         200: TodoResponse.array(),
         500: ErrorResponse
@@ -38,7 +38,7 @@ export const todoContract = c.router(
     },
     updateCompleted: {
       method: 'POST',
-      path: '/todos/:id/toggle',
+      path: '/:id/toggle',
       responses: {
         200: TodoResponse,
         404: ErrorResponse,
@@ -50,7 +50,8 @@ export const todoContract = c.router(
     }
   },
   {
-    strictStatusCodes: true
+    strictStatusCodes: true,
+    pathPrefix: '/todos'
   }
 );
 

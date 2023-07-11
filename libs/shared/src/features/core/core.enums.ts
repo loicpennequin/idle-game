@@ -1,4 +1,4 @@
-import type { Values } from '../types/utils';
+import type { Values } from '../../types/utils';
 
 export const ERROR_KINDS = {
   UNEXPECTED: 'UNEXPECTED',
