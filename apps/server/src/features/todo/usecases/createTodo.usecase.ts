@@ -4,7 +4,7 @@ import * as TE from 'fp-ts/TaskEither';
 import * as IO from 'fp-ts/IO';
 import { pipe } from 'fp-ts/function';
 import { UnexpectedError } from '../../../utils/errorFactory';
-import { TodoRepository } from '../prismaTodo.repository';
+import { TodoRepository } from '../todo.repository';
 import { Io } from '../../core/io';
 import { TodoMapper } from '../todo.mapper';
 import { Todo } from '../todo.entity';

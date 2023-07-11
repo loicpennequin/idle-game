@@ -1,5 +1,5 @@
 import type { ApiClient } from '@/features/core/apiClient';
-import { apiHandler } from '@/features/core/utils/api-helpers';
+import { apiHandler } from '@/utils/api-helpers';
 import type { TodoResponse, UUID } from '@daria/shared';
 
 export type TodoRepository = {
@@ -16,9 +16,9 @@ export const todoRepository = ({
 }): TodoRepository => {
   return {
     getAll: () => apiHandler(apiClient.todo.getAll),
-    getById: (id: UUID) => apiHandler(apiClient.todo.getById, { params: { id } }),
-    create: (text: string) => apiHandler(apiClient.todo.create, { body: { text } }),
-    updateCompleted: ({ id, completed }: { id: UUID; completed: boolean }) =>
+    getById: id => apiHandler(apiClient.todo.getById, { params: { id } }),
+    create: text => apiHandler(apiClient.todo.create, { body: { text } }),
+    updateCompleted: ({ id, completed }) =>
       apiHandler(apiClient.todo.updateCompleted, { params: { id }, body: { completed } })
   };
 };

@@ -7,21 +7,23 @@ const c = initContract();
 
 export const userContract = c.router(
   {
-    login: {
+    signup: {
       method: 'POST',
-      path: '/user',
+      path: '/',
       responses: {
-        200: UserResponse,
+        201: UserResponse,
         400: ErrorResponse,
         500: ErrorResponse
       },
       body: z.object({
-        text: z.string()
+        email: z.string().email(),
+        password: z.string()
       })
     }
   },
   {
-    strictStatusCodes: true
+    strictStatusCodes: true,
+    pathPrefix: '/users'
   }
 );
 

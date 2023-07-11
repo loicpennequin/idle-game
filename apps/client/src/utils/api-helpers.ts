@@ -1,4 +1,4 @@
-import { type AnyObject } from '@daria/shared';
+import { ErrorResponse, type AnyObject, isObject, isString } from '@daria/shared';
 import type { HTTPStatusCode, ErrorHttpStatusCode } from '@ts-rest/core';
 
 export const isApiError = <T extends { status: HTTPStatusCode }>(
@@ -18,8 +18,27 @@ export const apiHandler = <TFn extends GenericApiFunction>(
   Exclude<Awaited<ReturnType<TFn>>, { status: ErrorHttpStatusCode }>['body']
 > => {
   return fn(...args).then(response => {
-    if (isApiError(response)) throw new Error(response.body.kind);
+    if (isApiError(response)) throw response;
 
     return response.body;
   });
+};
+
+export const isErrorResponse = <TKind extends string>(
+  x: unknown,
+  kind?: TKind
+): x is TKind extends undefined
+  ? ErrorResponse
+  : ErrorResponse extends TKind
+  ? never
+  : ErrorResponse & { kind: TKind } => {
+  const isError =
+    isObject(x) &&
+    'kind' in x &&
+    'message' in x &&
+    isString(x.kind) &&
+    isString(x.message);
+  if (!isError) return false;
+  if (!isDefined(kind)) return true;
+  return kind === x.kind;
 };

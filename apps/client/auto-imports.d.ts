@@ -284,6 +284,7 @@ declare global {
   const useTitle: typeof import('@vueuse/core')['useTitle']
   const useToNumber: typeof import('@vueuse/core')['useToNumber']
   const useToString: typeof import('@vueuse/core')['useToString']
+  const useTodoList: typeof import('./src/features/todo/composables/todo.composables')['useTodoList']
   const useTodoStore: typeof import('./src/features/todo/composables/useTodoStore')['useTodoStore']
   const useToggle: typeof import('@vueuse/core')['useToggle']
   const useTransition: typeof import('@vueuse/core')['useTransition']

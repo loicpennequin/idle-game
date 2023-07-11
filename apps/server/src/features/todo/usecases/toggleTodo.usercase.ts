@@ -9,7 +9,7 @@ import {
   errorFactory
 } from '../../../utils/errorFactory';
 import { Todo } from '../todo.entity';
-import { TodoRepository } from '../prismaTodo.repository';
+import { TodoRepository } from '../todo.repository';
 import { Io } from '../../core/io';
 import { TodoMapper } from '../todo.mapper';
 

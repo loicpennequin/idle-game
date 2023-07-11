@@ -1,7 +1,7 @@
 import * as TE from 'fp-ts/TaskEither';
 import { UnexpectedError } from '../../../utils/errorFactory';
 import { Todo } from '../todo.entity';
-import { TodoRepository } from '../prismaTodo.repository';
+import { TodoRepository } from '../todo.repository';
 
 export type GetAllTodosUseCaseError = UnexpectedError;
 export type GetAllTodosUseCase = () => TE.TaskEither<GetAllTodosUseCaseError, Todo[]>;

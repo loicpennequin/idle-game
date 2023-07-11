@@ -8,7 +8,7 @@ const s = initServer();
 
 export const todoRouter = s.router(contract.todo, {
   create: ({ body, req: { container } }) => {
-    const result = pipe(
+    return pipe(
       container.createTodoUseCase(body),
       container.responseMapper(
         HTTP_STATUS_CODES.CREATED,
@@ -16,8 +16,6 @@ export const todoRouter = s.router(contract.todo, {
       ),
       execute
     );
-
-    return result;
   },
   getById: ({ params, req: { container } }) =>
     pipe(

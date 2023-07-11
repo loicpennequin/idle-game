@@ -1,4 +1,4 @@
-import { TODO_EVENTS, type TodoResponse } from '@daria/shared';
+import { TODO_EVENTS, type IoEvents, type TodoResponse } from '@daria/shared';
 import type { QueryClient } from '@tanstack/vue-query';
 import type { AppSocket } from '@/features/core/socket';
 import type { QueryKeys } from '@/features/core/queryKeys';

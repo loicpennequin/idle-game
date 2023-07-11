@@ -1,6 +1,6 @@
 import { UUID } from '@daria/shared';
 import { NotFoundError, UnexpectedError } from '../../../utils/errorFactory';
-import { TodoRepository } from '../prismaTodo.repository';
+import { TodoRepository } from '../todo.repository';
 import { Todo } from '../todo.entity';
 import * as TE from 'fp-ts/TaskEither';
 
