@@ -1,6 +1,6 @@
 <template>
   <main>
-    <h1>TODOS</h1>
+    <h1>Todo-list</h1>
 
     <TodoList />
     <TodoForm />

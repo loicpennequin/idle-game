@@ -16,9 +16,18 @@ model Todo {
 }
 
 model User {
-  id           String    @id @unique @default(cuid())
-  email        String
+  id           String        @id @unique @default(cuid())
+  email        String        @unique
   passwordHash String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime?     @updatedAt
+  refreshToken RefreshToken?
+}
+
+model RefreshToken {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now())
+  value     String   @unique @db.VarChar(200)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
 }

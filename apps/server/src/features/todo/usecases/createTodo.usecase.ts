@@ -1,8 +1,9 @@
 import { TODO_EVENTS, todoContract } from '@daria/shared';
 import { ServerInferRequest } from '@ts-rest/core';
 import * as TE from 'fp-ts/TaskEither';
+import * as E from 'fp-ts/Either';
 import * as IO from 'fp-ts/IO';
-import { pipe } from 'fp-ts/function';
+import { flow } from 'fp-ts/function';
 import { UnexpectedError } from '../../../utils/errorFactory';
 import { TodoRepository } from '../todo.repository';
 import { Io } from '../../core/io';
@@ -14,7 +15,7 @@ export type CreateTodoUseCaseError = UnexpectedError;
 
 export type CreateTodoUseCase = (
   dto: CreateTodoInput
-) => TE.TaskEither<CreateTodoUseCaseError, Todo>;
+) => Promise<E.Either<CreateTodoUseCaseError, Todo>>;
 
 type Dependencies = {
   todoRepo: TodoRepository;
@@ -22,17 +23,14 @@ type Dependencies = {
   todoMapper: TodoMapper;
 };
 
-export const createTodoUseCase = ({
-  todoRepo,
-  io,
-  todoMapper
-}: Dependencies): CreateTodoUseCase => {
-  return (input: CreateTodoInput) =>
-    pipe(
-      todoRepo.create(input),
-      TE.flatMapIO(todo => {
-        io.emit(TODO_EVENTS.TODO_CREATED, todoMapper.toResponse(todo));
-        return IO.of(todo);
-      })
-    );
-};
+export const createTodoUseCase =
+  ({ todoRepo, io, todoMapper }: Dependencies): CreateTodoUseCase =>
+  async input => {
+    const todo = await todoRepo.create(input);
+
+    if (E.isLeft(todo)) return todo;
+
+    io.emit(TODO_EVENTS.TODO_CREATED, todoMapper.toResponse(todo.right));
+
+    return todo;
+  };

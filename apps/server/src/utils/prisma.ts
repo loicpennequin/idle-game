@@ -14,14 +14,14 @@ export const prismaNotUniqueMatchers = {
 };
 
 export const handlePrismaError = <TValue extends () => any, TKey extends string>(
-  matchers: Record<TKey, TValue>
+  matchers?: Record<TKey, TValue>
 ) => {
   return (err: unknown) => {
     if (!(err instanceof Prisma.PrismaClientKnownRequestError)) {
-      return errorFactory.unexpected();
+      return errorFactory.unexpected({ cause: err instanceof Error ? err : undefined });
     }
 
-    const match = matchSwitch<ReturnType<TValue>, string>(err.code, matchers);
+    const match = matchSwitch<ReturnType<TValue>, string>(err.code, matchers ?? {});
     if (!isDefined(match)) return errorFactory.unexpected();
 
     return match;

@@ -1,5 +1,6 @@
 import { ERROR_KINDS, ErrorKind, AnyObject, Values, Nullable } from '@daria/shared';
 import { ErrorHttpStatusCode } from '@ts-rest/core';
+import { mapLeft } from 'fp-ts/Either';
 
 export const HTTP_STATUS_CODES = {
   OK: 200,
@@ -111,3 +112,7 @@ export const errorFactory = {
 };
 
 export type ErrorFactory = typeof errorFactory;
+
+export const toUnauthorized = mapLeft(() => errorFactory.unauthorized());
+export const toForbidden = mapLeft(() => errorFactory.forbidden());
+export const toBadRequest = mapLeft(() => errorFactory.badRequest());

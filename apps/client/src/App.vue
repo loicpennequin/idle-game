@@ -21,3 +21,62 @@ onErrorCaptured(err => {
     <RouterView v-else />
   </Suspense>
 </template>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+*:focus-visible {
+  transition: outline-offset 0.15s ease;
+  outline-offset: 5px;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f7f7fb;
+  color: #222;
+}
+
+main {
+  max-width: 48rem;
+  margin-inline: auto;
+  margin-block-start: 8rem;
+  background-color: white;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+}
+
+h1 {
+  margin-block-start: 0;
+}
+
+ul {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+input {
+  padding: 0.5rem;
+  margin-inline-end: 1em;
+  border: solid 1px #ddd;
+  accent-color: black;
+}
+
+input::placeholder {
+  font-style: italic;
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
+  padding: 0.5rem;
+  background-color: #222;
+  color: white;
+  transition: transform 0.25s;
+}
+button:hover {
+  transform: scale(1.05);
+}
+</style>

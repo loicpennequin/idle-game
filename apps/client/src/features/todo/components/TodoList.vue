@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { TodoResponse } from '@daria/shared';
+
 const { queryKeys, todoApi } = useContainer();
 
 const { data: todos, suspense } = useQuery({
@@ -6,9 +8,16 @@ const { data: todos, suspense } = useQuery({
   queryFn: todoApi.getAll
 });
 
-const { mutate: toggle, isLoading: isToggling } = useMutation({
+const { mutateAsync: toggle, isLoading: isToggling } = useMutation({
   mutationFn: todoApi.updateCompleted
 });
+
+const onChange = async (e: Event, todo: TodoResponse) => {
+  await toggle({ id: todo.id, completed: !todo.completed });
+  nextTick(() => {
+    (e.target as HTMLInputElement).focus();
+  });
+};
 
 const unsubscribe = todoApi.subscribe();
 onBeforeUnmount(unsubscribe);
@@ -24,7 +33,7 @@ await suspense();
           type="checkbox"
           :checked="todo.completed"
           :disabled="isToggling"
-          @change="toggle({ id: todo.id, completed: !todo.completed })"
+          @change="onChange($event, todo)"
         />
         {{ todo.text }}
       </label>

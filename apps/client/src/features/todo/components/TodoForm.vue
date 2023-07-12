@@ -16,7 +16,11 @@ const handleSubmit = () => {
 
 <template>
   <form @submit.prevent="handleSubmit">
-    <input v-model="text" />
+    <input
+      v-model="text"
+      placeholder="What needs to be done ?"
+      aria-label="What needs to be done ?"
+    />
     <button :disabled="isAdding">Add todo</button>
   </form>
 </template>

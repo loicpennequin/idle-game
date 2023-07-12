@@ -10,3 +10,7 @@ export const ErrorResponse = z.object({
   cause: z.string().optional()
 });
 export type ErrorResponse = z.infer<typeof ErrorResponse>;
+
+export const DefaultResponse = z.object({
+  success: z.boolean()
+});

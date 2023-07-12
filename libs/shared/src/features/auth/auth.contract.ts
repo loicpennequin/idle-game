@@ -1,5 +1,5 @@
 import { initContract } from '@ts-rest/core';
-import { ErrorResponse } from '../core';
+import { DefaultResponse, ErrorResponse } from '../core';
 import { z } from 'zod';
 import { TokenResponse } from './auth.schemas';
 
@@ -9,19 +9,40 @@ export const authContract = c.router(
   {
     login: {
       method: 'POST',
-      path: '/auth/login',
+      path: '/login',
       responses: {
         200: TokenResponse,
         401: ErrorResponse,
         500: ErrorResponse
       },
       body: z.object({
-        text: z.string()
+        email: z.string(),
+        password: z.string()
       })
+    },
+    logout: {
+      method: 'POST',
+      path: '/logout',
+      responses: {
+        200: DefaultResponse,
+        500: ErrorResponse
+      },
+      body: null
+    },
+    refresh: {
+      method: 'POST',
+      path: '/refresh',
+      responses: {
+        200: TokenResponse,
+        401: ErrorResponse,
+        500: ErrorResponse
+      },
+      body: null
     }
   },
   {
-    strictStatusCodes: true
+    strictStatusCodes: true,
+    pathPrefix: '/auth'
   }
 );
 
