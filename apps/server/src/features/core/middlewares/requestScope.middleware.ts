@@ -13,10 +13,21 @@ declare global {
 
 export type RequestScopeMiddleware = TsRestRequestHandler<Contract>;
 
-export const requestScopeMiddleware: RequestScopeMiddleware = (req, res, next) => {
+const parseAuthHeader = (header: string) => header.replace('Bearer ', '');
+
+export const requestScopeMiddleware: RequestScopeMiddleware = async (req, res, next) => {
   const scope = container.createScope();
   scope.register('req', asValue(req));
   scope.register('res', asValue(res));
+
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+    const session = await container.cradle.authenticateUseCase(
+      parseAuthHeader(authHeader)
+    );
+    scope.register('session', asValue(session));
+  }
 
   req.container = scope.cradle;
 

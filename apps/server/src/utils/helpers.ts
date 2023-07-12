@@ -5,7 +5,7 @@ import crypto from 'crypto';
 export const execute = <T extends () => any>(fn: T): ReturnType<T> => fn();
 
 export type UseCase<TInput, TResponse, TError extends AppError> = (
-  dto: TInput
+  input: TInput
 ) => Promise<E.Either<TError, TResponse>>;
 
 export const randomHash = () => crypto.randomBytes(10).toString('hex');

@@ -4,6 +4,7 @@ import { loginUsecase } from './usecases/login.usecase';
 import { refreshTokenRepository } from './refreshToken.repository';
 import { logoutUsecase } from './usecases/logout.usecase';
 import { refreshJwtUsecase } from './usecases/refreshJwt.usecase';
+import { authenticateUsecase } from './usecases/authenticate.usecase';
 
 export const authProviders = {
   tokenService: asFunction(tokenService),
@@ -11,5 +12,6 @@ export const authProviders = {
 
   loginUseCase: asFunction(loginUsecase),
   logoutUseCase: asFunction(logoutUsecase),
-  refreshJwtUseCase: asFunction(refreshJwtUsecase)
+  refreshJwtUseCase: asFunction(refreshJwtUsecase),
+  authenticateUseCase: asFunction(authenticateUsecase)
 };
