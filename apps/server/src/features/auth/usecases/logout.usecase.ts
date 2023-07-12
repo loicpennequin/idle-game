@@ -1,34 +1,31 @@
-import { authContract } from '@daria/shared';
-import { ServerInferRequest } from '@ts-rest/core';
-import {
-  UnauthorizedError,
-  UnexpectedError,
-  errorFactory
-} from '../../../utils/errorFactory';
-import { UserRepository } from '../../user/user.repository';
+import { UnexpectedError } from '../../../utils/errorFactory';
 import { UseCase } from '../../../utils/helpers';
-import { isLeft, left, right } from 'fp-ts/Either';
-import { compare } from 'bcrypt';
-import { RefreshToken, TokenService } from '../token.service';
+import { left, right } from 'fp-ts/Either';
 import { RefreshTokenRepository } from '../refreshToken.repository';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { REFRESH_TOKEN_COOKIE } from '../../../utils/constants';
 import { handlePrismaError } from '../../../utils/prisma';
+import { isString } from '@daria/shared';
 
 export type LogoutUseCaseError = UnexpectedError;
 
-export type LogoutUseCase = UseCase<RefreshToken, null, LogoutUseCaseError>;
+export type LogoutUseCase = UseCase<void, null, LogoutUseCaseError>;
 
 type Dependencies = {
   refreshTokenRepo: RefreshTokenRepository;
   res: Response;
+  req: Request;
 };
 
 export const logoutUsecase =
-  ({ refreshTokenRepo, res }: Dependencies): LogoutUseCase =>
-  async token => {
+  ({ refreshTokenRepo, req, res }: Dependencies): LogoutUseCase =>
+  async () => {
     try {
-      await refreshTokenRepo.deleteByValue(token);
+      const cookie = req.cookies?.[REFRESH_TOKEN_COOKIE];
+      if (!isString(cookie)) return right(null);
+
+      await refreshTokenRepo.deleteByValue(cookie);
+      res.clearCookie(REFRESH_TOKEN_COOKIE);
 
       return right(null);
     } catch (err) {

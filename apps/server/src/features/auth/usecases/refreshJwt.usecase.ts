@@ -1,5 +1,4 @@
-import { authContract } from '@daria/shared';
-import { ServerInferRequest } from '@ts-rest/core';
+import { isString } from '@daria/shared';
 import {
   UnauthorizedError,
   UnexpectedError,
@@ -8,45 +7,49 @@ import {
 import { UserRepository } from '../../user/user.repository';
 import { UseCase } from '../../../utils/helpers';
 import { isLeft, left, right } from 'fp-ts/Either';
-import { compare } from 'bcrypt';
 import { AccessToken, RefreshToken, TokenService } from '../token.service';
 import { RefreshTokenRepository } from '../refreshToken.repository';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { Config } from '../../../config';
 import { REFRESH_TOKEN_COOKIE } from '../../../utils/constants';
 
-export type LoginInput = ServerInferRequest<typeof authContract.login>['body'];
-export type LoginUseCaseError = UnexpectedError | UnauthorizedError;
+export type RefreshJwtUseCaseError = UnexpectedError | UnauthorizedError;
 
-export type LoginUseCase = UseCase<
-  LoginInput,
+export type RefreshJwtUseCase = UseCase<
+  void,
   { accessToken: AccessToken; refreshToken: RefreshToken },
-  LoginUseCaseError
+  RefreshJwtUseCaseError
 >;
 
 type Dependencies = {
   userRepo: UserRepository;
   tokenService: TokenService;
   refreshTokenRepo: RefreshTokenRepository;
+  req: Request;
   res: Response;
   config: Config;
 };
 
-export const loginUsecase =
+export const refreshJwtUsecase =
   ({
     userRepo,
     tokenService,
     refreshTokenRepo,
+    req,
     res,
     config
-  }: Dependencies): LoginUseCase =>
-  async input => {
-    const user = await userRepo.findByEmail(input.email);
+  }: Dependencies): RefreshJwtUseCase =>
+  async () => {
+    const cookie = req.cookies?.[REFRESH_TOKEN_COOKIE];
+    if (!isString(cookie)) {
+      throw left(errorFactory.unauthorized());
+    }
 
+    const user = await userRepo.findByRefreshToken(cookie);
     if (isLeft(user)) return left(errorFactory.unauthorized());
 
-    const isPasswordValid = await compare(input.password, user.right.passwordHash);
-    if (!isPasswordValid) return left(errorFactory.unauthorized());
+    const verified = tokenService.verifyRefreshToken(cookie);
+    if (isLeft(verified)) return verified;
 
     const refreshToken = await refreshTokenRepo.upsertByUserId(user.right.id);
     if (isLeft(refreshToken)) return left(errorFactory.unexpected());

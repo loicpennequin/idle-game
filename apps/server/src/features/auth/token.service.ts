@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken';
 import { Config } from '../../config';
 import { UUID } from '@daria/shared';
 import { randomHash } from '../../utils/helpers';
-import { errorFactory } from '../../utils/errorFactory';
+import { UnauthorizedError, errorFactory } from '../../utils/errorFactory';
+import { left, right, Either } from 'fp-ts/Either';
 
 type Dependencies = { config: Config };
 
@@ -12,18 +13,20 @@ export type RefreshToken = string;
 export type TokenService = {
   generateAccessToken(userId: UUID): AccessToken;
   generateRefreshToken(): RefreshToken;
-  verifyAccessToken(token: AccessToken): jwt.JwtPayload;
-  verifyRefreshToken(token: RefreshToken): string;
+  verifyAccessToken(token: AccessToken): Either<UnauthorizedError, jwt.JwtPayload>;
+  verifyRefreshToken(token: RefreshToken): Either<UnauthorizedError, jwt.JwtPayload>;
 };
 
 export const tokenService = ({ config }: Dependencies): TokenService => {
   const verifyToken = (token: string, secret: string) => {
     try {
-      return jwt.verify(token, secret, {
-        complete: false
-      });
+      return right(
+        jwt.verify(token, secret, {
+          complete: false
+        }) as jwt.JwtPayload
+      );
     } catch {
-      throw errorFactory.unauthorized();
+      return left(errorFactory.unauthorized());
     }
   };
 
@@ -39,10 +42,10 @@ export const tokenService = ({ config }: Dependencies): TokenService => {
       });
     },
     verifyAccessToken(token) {
-      return verifyToken(token, config.JWT.SECRET) as jwt.JwtPayload;
+      return verifyToken(token, config.JWT.SECRET);
     },
     verifyRefreshToken(token) {
-      return verifyToken(token, config.REFRESH_TOKEN.SECRET) as string;
+      return verifyToken(token, config.REFRESH_TOKEN.SECRET);
     }
   };
 };
