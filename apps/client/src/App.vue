@@ -57,9 +57,14 @@ ul {
   padding-inline-start: 0;
 }
 
+label,
+input:not(:is([type='checkbox'], [type='radio'])) {
+  display: block;
+}
+
 input {
   padding: 0.5rem;
-  margin-inline-end: 1em;
+  margin-block-end: 0.5rem;
   border: solid 1px #ddd;
   accent-color: black;
 }
@@ -76,7 +81,16 @@ button {
   color: white;
   transition: transform 0.25s;
 }
-button:hover {
-  transform: scale(1.05);
+@media (hover: hover) and (pointer: fine) {
+  button:hover:not(:disabled) {
+    transform: scale(1.05);
+  }
+}
+button:disabled {
+  opacity: 0.7;
+}
+
+.error {
+  color: hsl(0, 50%, 50%);
 }
 </style>

@@ -3,7 +3,7 @@ import express from 'express';
 
 const main = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { server, app, config } = container.cradle;
+  const { server, app, config, io } = container.cradle;
 
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static('public'));

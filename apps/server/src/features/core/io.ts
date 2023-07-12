@@ -21,9 +21,9 @@ export const createIo = ({ config, server }: { server: Server; config: Config })
   });
 
   io.on('connection', socket => {
-    console.log('socket connected', socket.id);
+    // console.log('socket connected', socket.id);
     socket.on('disconnect', () => {
-      console.log('socket disconnected', socket.id);
+      // console.log('socket disconnected', socket.id);
     });
   });
   return io;
