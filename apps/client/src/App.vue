@@ -80,6 +80,8 @@ button {
   background-color: #222;
   color: white;
   transition: transform 0.25s;
+  min-width: 6rem;
+  font-weight: 600;
 }
 @media (hover: hover) and (pointer: fine) {
   button:hover:not(:disabled) {

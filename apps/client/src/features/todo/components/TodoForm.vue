@@ -1,21 +1,11 @@
 <script setup lang="ts">
-const { todoApi } = useContainer();
-
-const { mutate: addTodo, isLoading: isAdding } = useMutation({
-  mutationFn: todoApi.create,
-  onSuccess: () => {
-    text.value = '';
-  }
-});
+const { mutate: addTodo, isLoading: isAdding } = useAddTodo();
 
 const text = ref();
-const handleSubmit = () => {
-  addTodo(text.value);
-};
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit">
+  <form @submit.prevent="addTodo(text)">
     <input
       v-model="text"
       placeholder="What needs to be done ?"
