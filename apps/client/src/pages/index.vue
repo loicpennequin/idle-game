@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const isAuthenticated = useIsAuthenticated();
+
+const { mutate, isLoading } = useLogout();
+</script>
+
 <template>
   <main>
     <h1>Cool App</h1>
@@ -10,6 +16,7 @@
     <SignupForm />
 
     <h2>Login</h2>
-    <LoginForm />
+    <LoginForm v-if="!isAuthenticated" />
+    <button v-else :disabled="isLoading" @click="mutate(undefined)">Log out</button>
   </main>
 </template>

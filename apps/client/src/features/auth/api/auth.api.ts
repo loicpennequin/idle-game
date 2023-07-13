@@ -3,7 +3,14 @@ import type { ClientInferRequest, ClientInferResponses } from '@ts-rest/core';
 import type { HttpService } from '@/features/core/api/http.service';
 import type { ApiClient } from '@/features/core/apiClient';
 import { apiHandler } from '@/utils/api-helpers';
-import { authContract, type Nullable } from '@daria/shared';
+import {
+  authContract,
+  type AnyObject,
+  type Nullable,
+  TokenResponse
+} from '@daria/shared';
+import type { QueryClient } from '@tanstack/vue-query';
+import { queryKeys } from '@/features/core/queryKeys';
 
 export type LoginRequest = ClientInferRequest<typeof authContract.login>;
 export type LoginResponse = ClientInferResponses<typeof authContract.login, 200>;
@@ -14,10 +21,8 @@ export type AuthApi = {
   login: (input: LoginRequest['body']) => Promise<LoginResponse['body']>;
   logout: () => Promise<LogoutResponse['body']>;
   refreshJwt: () => Promise<RefreshJwtResponse['body']>;
-  init: () => Promise<void>;
+  init: () => Promise<TokenResponse>;
 };
-
-type Dependencies = { apiClient: ApiClient; http: HttpService };
 
 export const REFRESH_ENDPOINT = authContract.refresh.path;
 export const LOGIN_ENDPOINT = authContract.login.path;
@@ -30,21 +35,26 @@ type JwtPayload = {
   exp: number;
 };
 
-export const authApi = ({ apiClient, http }: Dependencies): AuthApi => {
-  let token: Nullable<string> = null;
+type Dependencies = { apiClient: ApiClient; http: HttpService; queryClient: QueryClient };
+
+export const authApi = ({ apiClient, queryClient, http }: Dependencies): AuthApi => {
+  const getToken = () =>
+    queryClient.getQueryData<Nullable<LoginResponse['body']>>(
+      queryKeys.auth.token.queryKey
+    );
+  const setToken = (val: Nullable<LoginResponse['body']>) =>
+    queryClient.setQueryData(queryKeys.auth.token.queryKey, val);
+
   const getBearer = (token: string) => (token ? `JWT ${token}` : '');
 
   const addHeaders = () => {
     http.onRequest(config => {
+      const token = getToken();
       if (!token) return;
 
-      if (!config.options.headers) {
-        config.options.headers = new Headers();
-      }
-
-      const headers = config.options.headers as Headers;
-      if (!headers.has(AUTH_HEADER)) {
-        headers.set(AUTH_HEADER, getBearer(token));
+      const headers = config.options.headers as AnyObject;
+      if (!headers[AUTH_HEADER]) {
+        headers[AUTH_HEADER] = getBearer(token.accessToken);
       }
     });
   };
@@ -65,18 +75,18 @@ export const authApi = ({ apiClient, http }: Dependencies): AuthApi => {
   };
 
   const checkJwtExpiration = (jwt: string) => {
-    const { exp } = jwtDecode<JwtPayload>(jwt);
+    const decoded = jwtDecode<JwtPayload>(jwt);
     const now = new Date();
-    const expirationDate = new Date(exp * 1000); // exp is in seconds
+    const expirationDate = new Date(decoded.exp * 1000); // exp is in seconds
 
     return now.getTime() > expirationDate.getTime();
   };
 
   const refreshJwt = async () => {
-    const response = await apiClient.auth.refresh();
-    if (response.status === 200) {
-      token = response.body.accessToken;
-    }
+    const token = await apiHandler(apiClient.auth.refresh);
+    setToken(token);
+
+    return token;
   };
 
   const handleRefreshToken = () => {
@@ -85,11 +95,13 @@ export const authApi = ({ apiClient, http }: Dependencies): AuthApi => {
     let ongoingRefreshPromise: Nullable<Promise<void>>;
 
     const refreshJwtIfExpired = async () => {
+      const token = getToken();
+
       if (!token) return;
 
-      const isExpired = checkJwtExpiration(token);
+      const isExpired = checkJwtExpiration(token.accessToken);
       if (!isExpired) return;
-      token = null;
+      setToken(null);
 
       await refreshJwt();
     };
@@ -112,15 +124,27 @@ export const authApi = ({ apiClient, http }: Dependencies): AuthApi => {
   };
 
   return {
-    login: body => apiHandler(apiClient.auth.login, { body }),
-    logout: () => apiHandler(apiClient.auth.logout),
-    refreshJwt: () => apiHandler(apiClient.auth.refresh),
+    refreshJwt,
+
     init() {
       handleRefreshToken();
       addHeaders();
       handleRedirects();
 
       return refreshJwt();
+    },
+
+    async login(body) {
+      const token = await apiHandler(apiClient.auth.login, { body });
+      setToken(token);
+      return token;
+    },
+
+    async logout() {
+      const response = await apiHandler(apiClient.auth.logout);
+      setToken(null);
+
+      return response;
     }
   };
 };
