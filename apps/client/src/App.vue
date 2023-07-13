@@ -2,10 +2,13 @@
 import type { Nullable } from '@daria/shared';
 import { RouterView } from 'vue-router';
 
+useAuthGuard();
+
 const error = ref<Nullable<string>>();
 
 const { socket } = useContainer();
 socket.connect();
+
 onErrorCaptured(err => {
   error.value = err.message;
 });

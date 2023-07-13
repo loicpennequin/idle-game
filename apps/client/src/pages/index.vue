@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { definePage } from 'vue-router/auto';
+
+definePage({
+  name: 'Home'
+});
+
 const isAuthenticated = useIsAuthenticated();
 
 const { mutate, isLoading } = useLogout();
