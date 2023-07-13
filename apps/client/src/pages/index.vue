@@ -8,5 +8,8 @@
 
     <h2>Sign up</h2>
     <SignupForm />
+
+    <h2>Login</h2>
+    <LoginForm />
   </main>
 </template>

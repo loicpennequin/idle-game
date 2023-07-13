@@ -10,6 +10,6 @@ const dependencies = {
   ...userProviders,
   ...authProviders
 };
-export const container = createTypedContainer(dependencies);
 
+export const container = createTypedContainer(dependencies);
 export type Container = typeof container;

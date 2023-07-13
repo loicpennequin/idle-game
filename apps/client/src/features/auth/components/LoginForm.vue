@@ -4,7 +4,7 @@ const {
   isLoading,
   isSuccess,
   error
-} = useSignup({
+} = useLogin({
   onSuccess() {
     email.value = '';
     password.value = '';
@@ -17,15 +17,15 @@ const password = ref('');
 
 <template>
   <form @submit.prevent="signup({ email, password })">
-    <label for="email">E-mail</label>
-    <input id="email" type="email" v-model="email" required />
+    <label for="login-email">E-mail</label>
+    <input id="login-email" type="email" v-model="email" required />
 
-    <label for="password">Password</label>
-    <input id="password" type="password" v-model="password" required />
+    <label for="login-password">Password</label>
+    <input id="login-password" type="password" v-model="password" required />
 
     <button :disabled="isLoading">Sign up</button>
     <p v-if="error" class="error">{{ error }}</p>
-    <p v-if="isSuccess">Sign up successful</p>
+    <p v-if="isSuccess">Login successful</p>
   </form>
 </template>
 

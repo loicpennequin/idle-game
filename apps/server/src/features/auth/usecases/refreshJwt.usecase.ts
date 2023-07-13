@@ -42,7 +42,7 @@ export const refreshJwtUsecase =
   async () => {
     const cookie = req.cookies?.[REFRESH_TOKEN_COOKIE];
     if (!isString(cookie)) {
-      throw left(errorFactory.unauthorized());
+      return left(errorFactory.unauthorized());
     }
 
     const user = await userRepo.findByRefreshToken(cookie);

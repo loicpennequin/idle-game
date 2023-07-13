@@ -7,6 +7,10 @@ const configSchema = z.object({
   IS_DEV: z.boolean(),
   IS_PROD: z.boolean(),
 
+  COOKIE: z.object({
+    SECRET: z.string()
+  }),
+
   CORS: z.object({
     ALLOWED_ORIGINS: z.array(z.string())
   }),
@@ -32,6 +36,10 @@ export const config = (): Config =>
     NODE_ENV: process.env.NODE_ENV ?? 'development',
     IS_DEV: process.env.NODE_ENV === 'development',
     IS_PROD: process.env.NODE_ENV === 'production',
+
+    COOKIE: {
+      SECRET: process.env.COOKIE_SECRET
+    },
 
     CORS: {
       ALLOWED_ORIGINS: ['http://localhost:5173', 'http://localhost:5000']

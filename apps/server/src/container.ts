@@ -2,11 +2,11 @@ import { Express } from 'express';
 import { asFunction, asValue } from 'awilix';
 import { Nullable, TypedAwilixContainer, createTypedContainer } from '@daria/shared';
 import { config } from './config';
+import { User } from './features/user/user.entity';
 import { coreProviders } from './features/core/core.providers';
 import { todoProviders } from './features/todo/todo.providers';
 import { userProviders } from './features/user/user.providers';
 import { authProviders } from './features/auth/auth.providers';
-import { User } from './features/user/user.entity';
 
 const dependencies = {
   config: asFunction(config),

@@ -25,7 +25,7 @@ export const todoRepository = ({ prisma }: { prisma: PrismaClient }): TodoReposi
 
         return E.right(todo);
       } catch (err) {
-        return E.left(handlePrismaError({})(err));
+        return E.left(handlePrismaError()(err));
       }
     },
 
