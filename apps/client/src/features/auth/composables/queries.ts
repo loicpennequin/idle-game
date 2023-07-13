@@ -4,7 +4,6 @@ import type {
 } from '@/features/core/composables/useApiQuery';
 import type { Contract, Nullable } from '@daria/shared';
 import type { AuthApi, LoginResponse } from '../api/auth.api';
-import { QueryObserver } from '@tanstack/query-core';
 import { queryKeys, type QueryKeys } from '@/features/core/queryKeys';
 
 export const useLogin = (
@@ -51,10 +50,12 @@ export const useSession = (
   > = {}
 ) => {
   const { authApi } = useContainer();
+  const isAuthenticated = useIsAuthenticated();
 
-  return useQuery({
+  return createUseApiQuery<Contract['auth']['session']>()({
     ...options,
     ...queryKeys.auth.session,
-    queryFn: authApi.session
+    queryFn: authApi.session,
+    enabled: isAuthenticated
   });
 };

@@ -1,0 +1,23 @@
+{
+  "cssvar.files": [
+    "./node_modules/open-props/open-props.min.css",
+    "./src/styles/theme.css"
+  ],
+
+  "cssvar.ignore": [],
+
+  "cssvar.extensions": ["css", "postcss", "jsx", "tsx", "vue", "astro"],
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true,
+    "source.fixAll.eslint": true
+  },
+  "stylelint.validate": ["css", "scss", "vue", "html"],
+
+  "css.validate": false,
+  "scss.validate": false,
+
+  "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"],
+
+  "unocss.root": "apps/client"
+}

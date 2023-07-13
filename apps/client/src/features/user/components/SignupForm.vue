@@ -17,14 +17,18 @@ const password = ref('');
 
 <template>
   <form @submit.prevent="signup({ email, password })">
-    <label for="email">E-mail</label>
-    <input id="email" type="email" v-model="email" required />
+    <fieldset>
+      <UiFormLabel for="email">E-mail</UiFormLabel>
+      <UiTextInput id="email" type="email" v-model="email" required />
+    </fieldset>
 
-    <label for="password">Password</label>
-    <input id="password" type="password" v-model="password" required />
+    <fieldset>
+      <UiFormLabel for="password">Password</UiFormLabel>
+      <UiTextInput id="password" type="password" v-model="password" required />
+    </fieldset>
 
-    <button :disabled="isLoading">Sign up</button>
-    <p v-if="error" class="error">{{ error }}</p>
+    <UiButton :disabled="isLoading">Sign up</UiButton>
+    <UiFormError :error="error?.message" />
     <p v-if="isSuccess">Sign up successful</p>
   </form>
 </template>
