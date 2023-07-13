@@ -56,6 +56,7 @@ export const createUseApiInfiniteQuery =
 export type UseMutationFn<TAppRoute extends AppRoute> = (
   arg: any
 ) => Promise<DataResponse<TAppRoute>['body']>;
+
 export type UseApiMutationOptions<
   TAppRoute extends AppRoute,
   TFunction extends UseMutationFn<AppRoute>

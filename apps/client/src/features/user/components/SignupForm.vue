@@ -1,13 +1,10 @@
 <script setup lang="ts">
-const { userRepo } = useContainer();
-
 const {
   mutate: signup,
   isLoading,
   isSuccess,
   error
-} = useMutation({
-  mutationFn: userRepo.signup,
+} = useSignup({
   onSuccess() {
     email.value = '';
     password.value = '';

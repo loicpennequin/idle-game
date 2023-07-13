@@ -3,7 +3,7 @@ import { apiHandler } from '@/utils/api-helpers';
 import type { ApiClient } from '@/features/core/apiClient';
 import type { AppSocket } from '@/features/core/socket';
 import type { QueryClient } from '@tanstack/vue-query';
-import { updateTodoListCache } from '../utils/cache';
+import { updateTodoCache, updateTodoListCache } from '../utils/cache';
 
 type SubscriberCallback = (todo: TodoResponse) => void;
 
@@ -29,15 +29,21 @@ export const todoApi = ({ apiClient, socket, queryClient }: Dependencies): TodoA
 
     getById: id => apiHandler(apiClient.todo.getById, { params: { id } }),
 
-    create: text =>
-      apiHandler(apiClient.todo.create, { body: { text } }).then(todo => {
-        updateTodoListCache(queryClient, todo);
+    create: async text => {
+      const todo = await apiHandler(apiClient.todo.create, { body: { text } });
+      updateTodoListCache(queryClient, todo);
 
-        return todo;
-      }),
+      return todo;
+    },
 
-    updateCompleted: ({ id, completed }) =>
-      apiHandler(apiClient.todo.updateCompleted, { params: { id }, body: { completed } }),
+    updateCompleted: async ({ id, completed }) => {
+      const todo = await apiHandler(apiClient.todo.updateCompleted, {
+        params: { id },
+        body: { completed }
+      });
+      updateTodoCache(queryClient, todo);
+      return todo;
+    },
 
     subscribe({ onCreated = noop, onUpdated = noop } = {}) {
       socket.on(TODO_EVENTS.TODO_CREATED, onCreated);
