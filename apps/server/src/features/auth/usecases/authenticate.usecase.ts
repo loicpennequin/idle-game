@@ -1,5 +1,3 @@
-import { authContract } from '@daria/shared';
-import { ServerInferRequest } from '@ts-rest/core';
 import {
   UnauthorizedError,
   UnexpectedError,

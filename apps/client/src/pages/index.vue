@@ -15,8 +15,11 @@ const { mutate, isLoading } = useLogout();
     <h1>Cool App</h1>
 
     <h2>Todo list</h2>
-    <TodoList />
-    <TodoForm />
+    <template v-if="isAuthenticated">
+      <TodoList />
+      <TodoForm />
+    </template>
+    <p v-else>Login first to see the to do list</p>
 
     <h2>Sign up</h2>
     <SignupForm />

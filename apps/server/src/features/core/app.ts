@@ -31,7 +31,21 @@ export const createApp = ({
 
   createExpressEndpoints(contract, router, app, {
     responseValidation: true,
-    globalMiddleware: [requestScopeMiddleware],
+    globalMiddleware: [
+      requestScopeMiddleware,
+      (req, res, next) => {
+        if ('metadata' in req.tsRestRoute) {
+          const meta = req.tsRestRoute.metadata;
+          if (meta.needsAuth && !req.container.session) {
+            return res
+              .status(401)
+              .json(req.container.errorMapper.toResponse(errorFactory.unauthorized()));
+          }
+        }
+
+        next();
+      }
+    ],
     requestValidationErrorHandler: (err, req, res) => {
       res
         .status(400)
