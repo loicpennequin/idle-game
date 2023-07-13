@@ -34,8 +34,7 @@ export const todoContract = c.router(
       responses: {
         200: TodoResponse.array(),
         500: ErrorResponse
-      },
-      metadata: { needsAuth: true }
+      }
     },
     updateCompleted: {
       method: 'POST',

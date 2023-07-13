@@ -1,8 +1,11 @@
-import type { UseApiMutationOptions } from '@/features/core/composables/useApiQuery';
+import type {
+  UseApiMutationOptions,
+  UseApiQueryOptions
+} from '@/features/core/composables/useApiQuery';
 import type { Contract, Nullable } from '@daria/shared';
 import type { AuthApi, LoginResponse } from '../api/auth.api';
 import { QueryObserver } from '@tanstack/query-core';
-import { queryKeys } from '@/features/core/queryKeys';
+import { queryKeys, type QueryKeys } from '@/features/core/queryKeys';
 
 export const useLogin = (
   options: UseApiMutationOptions<Contract['auth']['login'], AuthApi['login']> = {}
@@ -39,4 +42,19 @@ export const useIsAuthenticated = () => {
   });
 
   return computed(() => !!query.data.value?.accessToken);
+};
+
+export const useSession = (
+  options: UseApiQueryOptions<
+    Contract['auth']['session'],
+    QueryKeys['auth']['session']['queryKey']
+  > = {}
+) => {
+  const { authApi } = useContainer();
+
+  return useQuery({
+    ...options,
+    ...queryKeys.auth.session,
+    queryFn: authApi.session
+  });
 };

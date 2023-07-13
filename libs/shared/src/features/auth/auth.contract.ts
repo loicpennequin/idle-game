@@ -2,6 +2,7 @@ import { initContract } from '@ts-rest/core';
 import { DefaultResponse, ErrorResponse } from '../core';
 import { z } from 'zod';
 import { TokenResponse } from './auth.schemas';
+import { UserResponse } from '../user/user.schemas';
 
 const c = initContract();
 
@@ -38,6 +39,16 @@ export const authContract = c.router(
         500: ErrorResponse
       },
       body: null
+    },
+    session: {
+      method: 'GET',
+      path: '/me',
+      responses: {
+        200: UserResponse,
+        401: ErrorResponse,
+        500: ErrorResponse
+      },
+      metadata: { needsAuth: true }
     }
   },
   {

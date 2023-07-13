@@ -5,6 +5,7 @@ import type { ApiClient } from '@/features/core/apiClient';
 import { apiHandler } from '@/utils/api-helpers';
 import {
   authContract,
+  type AuthContract,
   type AnyObject,
   type Nullable,
   TokenResponse
@@ -12,15 +13,17 @@ import {
 import type { QueryClient } from '@tanstack/vue-query';
 import { queryKeys } from '@/features/core/queryKeys';
 
-export type LoginRequest = ClientInferRequest<typeof authContract.login>;
-export type LoginResponse = ClientInferResponses<typeof authContract.login, 200>;
-export type LogoutResponse = ClientInferResponses<typeof authContract.logout, 200>;
-export type RefreshJwtResponse = ClientInferResponses<typeof authContract.refresh, 200>;
+export type LoginRequest = ClientInferRequest<AuthContract['login']>;
+export type LoginResponse = ClientInferResponses<AuthContract['login'], 200>;
+export type LogoutResponse = ClientInferResponses<AuthContract['logout'], 200>;
+export type RefreshJwtResponse = ClientInferResponses<AuthContract['refresh'], 200>;
+export type SessionResponse = ClientInferResponses<AuthContract['session'], 200>;
 
 export type AuthApi = {
   login: (input: LoginRequest['body']) => Promise<LoginResponse['body']>;
   logout: () => Promise<LogoutResponse['body']>;
   refreshJwt: () => Promise<RefreshJwtResponse['body']>;
+  session: () => Promise<SessionResponse['body']>;
   init: () => Promise<TokenResponse>;
 };
 
@@ -145,6 +148,10 @@ export const authApi = ({ apiClient, queryClient, http }: Dependencies): AuthApi
       setToken(null);
 
       return response;
+    },
+
+    session() {
+      return apiHandler(apiClient.auth.session);
     }
   };
 };

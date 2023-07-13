@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { asFunction, asValue } from 'awilix';
+import { asFunction, asValue, Resolver } from 'awilix';
 import { Nullable, TypedAwilixContainer, createTypedContainer } from '@daria/shared';
 import { config } from './config';
 import { User } from './features/user/user.entity';
@@ -21,11 +21,12 @@ const dependencies = {
 
 export const container = createTypedContainer(dependencies);
 
+type Dependencies = typeof dependencies;
+type RequestScopedDependencies = Omit<Dependencies, 'req' | 'res' | 'session'> & {
+  session: Resolver<Nullable<User>>;
+  req: Resolver<Express['request']>;
+  res: Resolver<Express['response']>;
+};
+
 export type Container = typeof container;
-export type RequestScopedContainer = TypedAwilixContainer<
-  typeof dependencies & {
-    session: Nullable<User>;
-    req: Express['request'];
-    res: Express['response'];
-  }
->;
+export type RequestScopedContainer = TypedAwilixContainer<RequestScopedDependencies>;

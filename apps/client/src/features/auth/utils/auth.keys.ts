@@ -1,7 +1,8 @@
 import { createQueryKeys, type inferQueryKeys } from '@lukemorales/query-key-factory';
 
 export const authKeys = createQueryKeys('auth', {
-  token: null
+  token: null,
+  session: null
 });
 
 export type AuthDefs = typeof authKeys;
