@@ -1,5 +1,6 @@
 {
   "name": "@daria/server",
+  "license": "MIT",
   "version": "3.1.0",
   "main": "src/index.ts",
   "scripts": {
@@ -21,7 +22,7 @@
   "dependencies": {
     "@babakness/exhaustive-type-checking": "^0.1.3",
     "@daria/shared": "*",
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "5",
     "@ts-rest/core": "^3.26.3",
     "@ts-rest/express": "^3.25.1",
     "@types/bcrypt": "^5.0.0",
@@ -74,7 +75,7 @@
     "esbuild": "^0.17.0",
     "eslint": "^8.26.0",
     "eslint-config-daria": "*",
-    "prisma": "^4.15.0",
+    "prisma": "5",
     "tsx": "^3.12.5",
     "typescript": "^5.0.4",
     "vitest": "^0.29.3"

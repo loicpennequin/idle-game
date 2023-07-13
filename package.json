@@ -1,16 +1,19 @@
 {
   "name": "root",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "client": "yarn workspace @daria/client",
     "server": "yarn workspace @daria/server",
+    "cli": "yarn workspace @daria/cli",
     "dev": "turbo run dev",
-    "db:start": "yarn serber db:start",
+    "db:start": "yarn server db:start",
     "db:stop": "yarn server db:stop",
     "db:sync": "yarn server db:sync",
     "db:ui": "yarn server db:ui",
     "build": "turbo run build && shx cp -r ./apps/client/dist ./apps/server/public/",
-    "start": "yarn server start"
+    "start": "yarn server start",
+    "cli:run": "yarn cli start"
   },
   "workspaces": {
     "packages": [
