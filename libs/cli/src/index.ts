@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { feature } from './commands/feature';
 import { setup } from './commands/setup';
 import { logger } from './gui.js';
 import { Command } from 'commander';
@@ -13,9 +14,7 @@ import { Command } from 'commander';
       '<name>',
       'The name of the feature you wish to create. It will be the name of the folder the created files will go to.'
     )
-    .action(name => {
-      console.log('feature command not implemented yet');
-    });
+    .action(feature);
 
   program.command('setup').description('Setup the project').action(setup);
 
