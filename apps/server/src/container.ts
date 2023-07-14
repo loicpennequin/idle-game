@@ -7,8 +7,10 @@ import { asFunction, asValue, Resolver } from 'awilix';
 import { Nullable, TypedAwilixContainer, createTypedContainer } from '@daria/shared';
 import { config } from './config';
 import { User } from './features/user/user.entity';
+import { arenaProviders } from './features/arena/arena.providers';
 import { authProviders } from './features/auth/auth.providers';
 import { coreProviders } from './features/core/core.providers';
+import { heroProviders } from './features/hero/hero.providers';
 import { todoProviders } from './features/todo/todo.providers';
 import { userProviders } from './features/user/user.providers';
 
@@ -17,8 +19,10 @@ const dependencies = {
   req: asValue(null),
   res: asValue(null),
   session: asValue(null),
+  ...arenaProviders,
   ...authProviders,
   ...coreProviders,
+  ...heroProviders,
   ...todoProviders,
   ...userProviders
 };

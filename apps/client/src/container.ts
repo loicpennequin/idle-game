@@ -3,14 +3,18 @@
  *  If you need to edit the template, to to libs/cli/src/commands/feature.ts
  */
 import { createTypedContainer } from '@daria/shared';
+import { arenaProviders } from './features/arena/arena.providers';
 import { authProviders } from './features/auth/auth.providers';
 import { coreProviders } from './features/core/core.providers';
+import { heroProviders } from './features/hero/hero.providers';
 import { todoProviders } from './features/todo/todo.providers';
 import { userProviders } from './features/user/user.providers';
 
 const dependencies = {
+  ...arenaProviders,
   ...authProviders,
   ...coreProviders,
+  ...heroProviders,
   ...todoProviders,
   ...userProviders
 };
