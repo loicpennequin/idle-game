@@ -77,6 +77,7 @@ const createServerFeature = async (name: string) => {
       errorFactory
     } from '../../utils/errorFactory';
     import { ${capitalizedName} } from './${name}.entity';
+    import { handlePrismaError } from '../../utils/prisma';
 
     export type ${capitalizedName}Repository = {
       findAll(): Promise<E.Either<UnexpectedError, ${capitalizedName}[]>>;
@@ -89,7 +90,7 @@ const createServerFeature = async (name: string) => {
           try {
             throw errorFactory.unexpected({ message: 'not implemented' })
           } catch (err) {
-            return E.left(handlePrismaError(prismaNotUniqueMatchers)(err));
+            return E.left(handlePrismaError()(err));
           }
         }
       };
@@ -97,17 +98,14 @@ const createServerFeature = async (name: string) => {
   `;
 
   const useCaseTemplate = dedent`
-    import { ${name}Contract } from '@daria/shared';
-    import { ServerInferRequest } from '@ts-rest/core';
     import { UnexpectedError } from '../../../utils/errorFactory';
     import { ${capitalizedName} } from '../${name}.entity';
     import { ${capitalizedName}Repository } from '../${name}.repository';
     import { UseCase } from '../../../utils/helpers';
 
-    export type GetAll${capitalizedName}Input = ServerInferRequest<typeof ${name}Contract.getAll>['body'];
     export type GetAll${capitalizedName}Error = UnexpectedError;
 
-    export type GetAll${capitalizedName}sUseCase = UseCase<GetAll${capitalizedName}Input, ${capitalizedName}, GetAll${capitalizedName}Error>;
+    export type GetAll${capitalizedName}sUseCase = UseCase<void, ${capitalizedName}[], GetAll${capitalizedName}Error>;
 
     type Dependencies = { ${name}Repo: ${capitalizedName}Repository };
 

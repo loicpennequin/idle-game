@@ -7,16 +7,19 @@ export type ArenaMapper = {
 };
 
 export const arenaMapper = (): ArenaMapper => {
-  const mapArena = (arena: Arena): ArenaResponse => {
+  const toResponse = (arena: Arena): ArenaResponse => {
     return {
-      id: arena.id
+      id: arena.id,
+      name: arena.name,
+      maxSlots: arena.maxslots,
+      availableSlots: arena.maxslots - arena.heroes.length
     };
   };
 
   return {
-    toResponse: mapArena,
+    toResponse,
     toResponseArray(arenas) {
-      return arenas.map(mapArena);
+      return arenas.map(toResponse);
     }
   };
 };

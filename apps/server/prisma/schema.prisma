@@ -28,6 +28,23 @@ model RefreshToken {
   id        String   @id @unique @default(cuid())
   createdAt DateTime @default(now())
   value     String   @unique @db.VarChar(200)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Hero {
+  id        String    @id @unique @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  arenaId   String?
+  arena     Arena?    @relation(fields: [arenaId], references: [id])
+}
+
+model Arena {
+  id        String    @id @unique @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  name      String    @unique
+  maxslots  Int
+  heroes    Hero[]
 }
