@@ -34,7 +34,7 @@ export const createApp = ({
       }
     },
     {
-      setOperationId: true
+      setOperationId: false
     }
   );
 

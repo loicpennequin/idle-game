@@ -254,7 +254,7 @@ const createClientFeature = async (name: string) => {
     apiClient: ApiClient;
     queryClient: QueryClient;
   };
-  export const todoApi = ({ apiClient, queryClient }: Dependencies): ${capitalizedName}Api => {
+  export const ${name}Api = ({ apiClient, queryClient }: Dependencies): ${capitalizedName}Api => {
     return {
       getAll: () => apiHandler(apiClient.${name}.getAll),
     };
@@ -263,8 +263,6 @@ const createClientFeature = async (name: string) => {
 
   const keysTemplate = dedent`
   import { createQueryKeys, type inferQueryKeys } from '@lukemorales/query-key-factory';
-  import type { UUID } from '@daria/shared';
-  import type { MaybeRef } from '@/utils/types';
 
   export const ${name}Keys = createQueryKeys('${name}', {
     list: null
@@ -280,8 +278,8 @@ const createClientFeature = async (name: string) => {
       UseApiQueryOptions
     } from '@/features/core/composables/useApiQuery';
     import { queryKeys, type QueryKeys } from '@/features/core/queryKeys';
-    import type { Contract, ${capitalizedName}Response } from '@daria/shared';
-    import type { ${capitalizedName}Api } from '../api/${name}.api';
+    import type { Contract } from '@daria/shared';
+  
 
     export const use${capitalizedName}s = (
       options: UseApiQueryOptions<
@@ -319,10 +317,10 @@ const createClientFeature = async (name: string) => {
       fs.lstatSync(resolve(clientRoot, 'features', fileOrdir)).isDirectory()
     );
   const featuresWithProviders = features.filter(feature =>
-    fs.existsSync(resolve(serverRoot, 'features', feature, `${feature}.providers.ts`))
+    fs.existsSync(resolve(clientRoot, 'features', feature, `${feature}.providers.ts`))
   );
   const featuresWithQueryKeys = features.filter(feature =>
-    fs.existsSync(resolve(serverRoot, 'features', feature, `utils/${feature}.keys.ts`))
+    fs.existsSync(resolve(clientRoot, 'features', feature, `utils/${feature}.keys.ts`))
   );
 
   const containerTemplate = dedent`
@@ -416,7 +414,7 @@ const createSharedFeature = async (name: string) => {
  `;
 
   await createFile(resolve(featureDir, `${name}.contract.ts`), contractTemplate);
-  await createFile(resolve(featureDir, `${name}.entity.ts`), schemasTemplate);
+  await createFile(resolve(featureDir, `${name}.schemas.ts`), schemasTemplate);
   await createFile(resolve(featureDir, `index.ts`), indexTemplate);
 
   const features = fs
@@ -425,7 +423,7 @@ const createSharedFeature = async (name: string) => {
       fs.lstatSync(resolve(sharedRoot, 'features', fileOrdir)).isDirectory()
     );
   const featuresWithContract = features.filter(feature =>
-    fs.existsSync(resolve(serverRoot, 'features', feature, `${feature}.contract.ts`))
+    fs.existsSync(resolve(sharedRoot, 'features', feature, `${feature}.contract.ts`))
   );
 
   const contractIndexTemplate = dedent`
@@ -440,7 +438,7 @@ const createSharedFeature = async (name: string) => {
     export const contract = c.router(
       {
         ${featuresWithContract
-          .map(feature => `${feature}: ${feature}Contract,`)
+          .map(feature => `${feature}: ${feature}Contract`)
           .join(',\n')}
       },
       {
@@ -453,7 +451,7 @@ const createSharedFeature = async (name: string) => {
   `;
 
   const featuresIndexTemplate = features
-    .map(feature => `export * from '/${feature}';`)
+    .map(feature => `export * from './${feature}';`)
     .join('\n');
 
   await createFile(resolve(sharedRoot, `contract.ts`), contractIndexTemplate);

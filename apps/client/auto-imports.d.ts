@@ -188,6 +188,7 @@ declare global {
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
+  const useFoos: typeof import('./src/features/foo/composables/queries')['useFoos']
   const useForm: typeof import('vee-validate')['useForm']
   const useFormErrors: typeof import('vee-validate')['useFormErrors']
   const useFormValues: typeof import('vee-validate')['useFormValues']

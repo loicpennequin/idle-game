@@ -9,7 +9,6 @@ import { config } from './config';
 import { User } from './features/user/user.entity';
 import { authProviders } from './features/auth/auth.providers';
 import { coreProviders } from './features/core/core.providers';
-import { fooProviders } from './features/foo/foo.providers';
 import { todoProviders } from './features/todo/todo.providers';
 import { userProviders } from './features/user/user.providers';
 
@@ -20,7 +19,6 @@ const dependencies = {
   session: asValue(null),
   ...authProviders,
   ...coreProviders,
-  ...fooProviders,
   ...todoProviders,
   ...userProviders
 };
