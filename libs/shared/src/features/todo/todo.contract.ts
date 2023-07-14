@@ -21,7 +21,7 @@ export const todoContract = c.router(
     },
     getById: {
       method: 'GET',
-      path: `/:id`,
+      path: '/:id',
       responses: {
         200: TodoResponse,
         404: ErrorResponse,
@@ -30,7 +30,7 @@ export const todoContract = c.router(
     },
     getAll: {
       method: 'GET',
-      path: `/`,
+      path: '/',
       responses: {
         200: TodoResponse.array(),
         500: ErrorResponse

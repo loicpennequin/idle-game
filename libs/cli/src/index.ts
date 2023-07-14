@@ -17,8 +17,7 @@ import { Command } from 'commander';
     .action(feature);
 
   program.command('setup').description('Setup the project').action(setup);
-
-  program.parseAsync();
+  await program.parseAsync();
 
   process.exit(0);
 })().catch(err => {
