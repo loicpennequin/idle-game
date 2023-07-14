@@ -13,38 +13,52 @@ const { data: session } = useSession();
 </script>
 
 <template>
-  <main class="container surface">
+  <main class="container">
     <h1 class="col-span-2">Cool App</h1>
 
-    <section>
+    <section class="surface">
       <h2>Login</h2>
-      <p v-if="session">Hello, {{ session }}</p>
+      <p v-if="session">Hello, {{ session.email }}</p>
       <UiButton v-if="isAuthenticated" :disabled="isLoading" @click="mutate(undefined)">
         Log out
       </UiButton>
       <LoginForm v-else />
     </section>
-    <section>
+
+    <section class="surface">
       <h2>Sign up</h2>
       <SignupForm />
     </section>
 
-    <section class="col-span-2">
-      <h2>Todo list</h2>
-      <template v-if="isAuthenticated">
+    <template v-if="isAuthenticated">
+      <section class="surface">
+        <h2>Todo list</h2>
         <TodoList />
+      </section>
+
+      <section class="surface">
         <TodoForm />
-      </template>
-      <p v-else>Login first to see the to do list</p>
-    </section>
+      </section>
+    </template>
+    <p v-else>Login first to see the to do list</p>
   </main>
 </template>
 
 <style scoped lang="postcss">
+main {
+  --container-size: var(--size-xl);
+}
+
 @media (min-width: 48em) {
   main {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--size-4);
+
+    > section {
+      border: solid var(--border-size-1) var(--border-dimmed);
+      padding: var(--size-5);
+    }
   }
 }
 </style>

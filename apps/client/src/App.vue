@@ -6,8 +6,17 @@ useAuthGuard();
 
 const error = ref<Nullable<string>>();
 
+const isAuthenticated = useIsAuthenticated();
 const { socket } = useContainer();
-socket.connect();
+watchEffect(() => {
+  if (socket.connected && !isAuthenticated.value) {
+    socket.disconnect();
+  }
+
+  if (socket.disconnected && isAuthenticated.value) {
+    socket.connect();
+  }
+});
 
 onErrorCaptured(err => {
   error.value = err.message;

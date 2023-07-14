@@ -26,7 +26,6 @@ type Dependencies = {
 export const authenticateUsecase =
   ({ tokenService, userRepo }: Dependencies): AuthenticateUseCase =>
   async accessToken => {
-    console.log(accessToken);
     const verified = tokenService.verifyAccessToken(accessToken);
     if (isLeft(verified)) return verified;
 

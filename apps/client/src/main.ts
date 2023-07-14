@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router/auto';
 import { container } from './container';
 import App from './App.vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
+import Preview from 'vite-plugin-vue-component-preview/client';
 
 declare module 'vue-router/auto' {
   interface RouteMeta {
@@ -14,6 +15,8 @@ declare module 'vue-router/auto' {
 const app = createApp(App);
 
 app.use(VueQueryPlugin, { queryClient: container.resolve('queryClient') });
+app.use(Preview);
+
 app.use(
   createRouter({
     history: createWebHistory()

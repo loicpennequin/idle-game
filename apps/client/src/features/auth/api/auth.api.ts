@@ -5,10 +5,11 @@ import type { ApiClient } from '@/features/core/apiClient';
 import { apiHandler } from '@/utils/api-helpers';
 import {
   authContract,
+  TokenResponse,
+  ONE_MINUTE_IN_MS,
   type AuthContract,
   type AnyObject,
-  type Nullable,
-  TokenResponse
+  type Nullable
 } from '@daria/shared';
 import type { QueryClient } from '@tanstack/vue-query';
 import { queryKeys } from '@/features/core/queryKeys';
@@ -72,7 +73,7 @@ export const authApi = ({ apiClient, queryClient, http }: Dependencies): AuthApi
       }
 
       if (response.status === 401) {
-        window.location.href = '/login';
+        // window.location.href = '/login';
       }
     });
   };
@@ -81,8 +82,8 @@ export const authApi = ({ apiClient, queryClient, http }: Dependencies): AuthApi
     const decoded = jwtDecode<JwtPayload>(jwt);
     const now = new Date();
     const expirationDate = new Date(decoded.exp * 1000); // exp is in seconds
-
-    return now.getTime() > expirationDate.getTime();
+    const buffer = ONE_MINUTE_IN_MS;
+    return now.getTime() + buffer > expirationDate.getTime();
   };
 
   const refreshJwt = async () => {

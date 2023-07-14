@@ -42,7 +42,11 @@ export const config = (): Config =>
     },
 
     CORS: {
-      ALLOWED_ORIGINS: ['http://localhost:5173', 'http://localhost:5000']
+      ALLOWED_ORIGINS: [
+        'http://localhost:5173', // dev front end
+        'http://localhost:5000', // local prod front end
+        'http://localhost:3333' // vite preview
+      ]
     },
 
     JWT: {

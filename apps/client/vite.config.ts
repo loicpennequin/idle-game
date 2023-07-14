@@ -1,13 +1,13 @@
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { VueRouterAutoImports } from 'unplugin-vue-router';
 import { fileURLToPath, URL } from 'node:url';
 import AutoImport from 'unplugin-auto-import/vite';
 import VueRouter from 'unplugin-vue-router/vite';
 import Components from 'unplugin-vue-components/vite';
 import UnoCSS from 'unocss/vite';
 import { ArkUiResolver } from './tools/ark-ui-resolver';
-
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { VueRouterAutoImports } from 'unplugin-vue-router';
+import preview from 'vite-plugin-vue-component-preview';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,6 +23,8 @@ export default defineConfig({
         defineModel: true
       }
     }),
+
+    preview(),
 
     UnoCSS({
       mode: 'vue-scoped'
