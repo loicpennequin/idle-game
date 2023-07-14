@@ -48,7 +48,7 @@ export const authApi = ({ apiClient, queryClient, http }: Dependencies): AuthApi
   const setToken = (val: Nullable<LoginResponse['body']>) =>
     queryClient.setQueryData(queryKeys.auth.token.queryKey, val);
 
-  const getBearer = (token: string) => (token ? `JWT ${token}` : '');
+  const getBearer = (token: string) => (token ? `Bearer ${token}` : '');
 
   const addHeaders = () => {
     http.onRequest(config => {

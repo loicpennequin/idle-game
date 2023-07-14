@@ -24,7 +24,9 @@ export default defineConfig({
       }
     }),
 
-    UnoCSS(),
+    UnoCSS({
+      mode: 'vue-scoped'
+    }),
 
     AutoImport({
       include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],

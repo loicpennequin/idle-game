@@ -14,34 +14,37 @@ const { data: session } = useSession();
 
 <template>
   <main class="container surface">
-    <h1>Cool App</h1>
+    <h1 class="col-span-2">Cool App</h1>
 
-    <section class="flex flex-wrap gap-5">
-      <div>
-        <h2>Login</h2>
-        <p v-if="session">Hello, {{ session }}</p>
-        <UiButton v-if="isAuthenticated" :disabled="isLoading" @click="mutate(undefined)">
-          Log out
-        </UiButton>
-        <LoginForm v-else />
-      </div>
-      <div>
-        <h2>Sign up</h2>
-        <SignupForm />
-      </div>
+    <section>
+      <h2>Login</h2>
+      <p v-if="session">Hello, {{ session }}</p>
+      <UiButton v-if="isAuthenticated" :disabled="isLoading" @click="mutate(undefined)">
+        Log out
+      </UiButton>
+      <LoginForm v-else />
+    </section>
+    <section>
+      <h2>Sign up</h2>
+      <SignupForm />
     </section>
 
-    <h2>Todo list</h2>
-    <template v-if="isAuthenticated">
-      <TodoList />
-      <TodoForm />
-    </template>
-    <p v-else>Login first to see the to do list</p>
+    <section class="col-span-2">
+      <h2>Todo list</h2>
+      <template v-if="isAuthenticated">
+        <TodoList />
+        <TodoForm />
+      </template>
+      <p v-else>Login first to see the to do list</p>
+    </section>
   </main>
 </template>
 
-<style scoped>
-section > div {
-  min-width: var(--size-xs);
+<style scoped lang="postcss">
+@media (min-width: 48em) {
+  main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 </style>

@@ -2,6 +2,7 @@ import { asValue } from 'awilix';
 import { TsRestRequestHandler } from '@ts-rest/express';
 import { Contract } from '@daria/shared';
 import { RequestScopedContainer, container } from '../../../container';
+import { isRight } from 'fp-ts/lib/Either';
 
 declare global {
   namespace Express {
@@ -13,7 +14,7 @@ declare global {
 
 export type RequestScopeMiddleware = TsRestRequestHandler<Contract>;
 
-const parseAuthHeader = (header: string) => header.replace('Bearer ', '');
+const parseAuthHeader = (header: string) => header.split(' ')[1];
 
 export const requestScopeMiddleware: RequestScopeMiddleware = async (req, res, next) => {
   const scope = container.createScope();
@@ -26,7 +27,10 @@ export const requestScopeMiddleware: RequestScopeMiddleware = async (req, res, n
     const session = await container.cradle.authenticateUseCase(
       parseAuthHeader(authHeader)
     );
-    scope.register('session', asValue(session));
+
+    if (isRight(session)) {
+      scope.register('session', asValue(session.right));
+    }
   }
 
   req.container = scope.cradle;

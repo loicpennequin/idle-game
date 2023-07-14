@@ -33,7 +33,11 @@ const tag = computed(() => {
     :is="tag"
     :to="props.to"
     class="ui-button-base"
-    :class="{ 'is-inline': props.isInline, 'is-cta': props.isCta }"
+    :class="{
+      'is-inline': props.isInline,
+      'is-cta': props.isCta,
+      'is-loading': props.isLoading
+    }"
     :disabled="attrs.disabled || props.isLoading"
   >
     <UiIcon
@@ -79,7 +83,14 @@ const tag = computed(() => {
 
   &:where(:disabled) {
     cursor: not-allowed;
-    background-color: var(--disabled);
+
+    &:not(.is-loading) {
+      background-color: var(--disabled);
+    }
+  }
+
+  .is-loading {
+    opacity: 0.8;
   }
 
   &,

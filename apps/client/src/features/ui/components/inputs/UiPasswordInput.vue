@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Nullable } from '~/utils/types';
+import type { Nullable } from '@daria/shared';
 
 const props = defineProps<{
   name?: string;
@@ -14,7 +14,6 @@ const vModel = useVModel(props, 'modelValue', emit);
 const isPasswordShown = ref(false);
 const type = computed(() => (isPasswordShown.value ? 'text' : 'password'));
 
-const { t } = useI18n();
 const slots = useSlots();
 </script>
 
@@ -26,7 +25,7 @@ const slots = useSlots();
     <template #right>
       <UiIconButton
         type="button"
-        :title="t(isPasswordShown ? 'hide' : 'show')"
+        :title="isPasswordShown ? 'hide password' : 'show password'"
         :icon="isPasswordShown ? 'mdi-eye-off' : 'mdi-eye'"
         @click="isPasswordShown = !isPasswordShown"
       />

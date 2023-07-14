@@ -20,12 +20,8 @@ export type TokenService = {
 export const tokenService = ({ config }: Dependencies): TokenService => {
   const verifyToken = (token: string, secret: string) => {
     try {
-      return right(
-        jwt.verify(token, secret, {
-          complete: false
-        }) as jwt.JwtPayload
-      );
-    } catch {
+      return right(jwt.verify(token, secret) as jwt.JwtPayload);
+    } catch (err) {
       return left(errorFactory.unauthorized());
     }
   };

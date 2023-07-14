@@ -1,4 +1,3 @@
-import 'virtual:uno.css';
 import '@/styles/global.css';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router/auto';

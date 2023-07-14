@@ -31,11 +31,6 @@ const buttonProps = computed(() => {
 .ui-icon-button {
   padding: var(--size-1);
   border-radius: var(--radius-round);
-
-  & > svg {
-    width: var(--size-5-em);
-    height: var(--size-5-em);
-  }
 }
 </style>
 s

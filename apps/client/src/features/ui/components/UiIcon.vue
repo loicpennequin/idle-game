@@ -35,10 +35,10 @@ const props = withDefaults(
     font-size: var(--font-size-1);
   }
   &:where(.md) {
-    font-size: var(--font-size-3);
+    font-size: var(--font-size-4);
   }
   &:where(.lg) {
-    font-size: var(--font-size-4);
+    font-size: var(--font-size-5);
   }
   &:where(.xl) {
     font-size: var(--font-size-6);

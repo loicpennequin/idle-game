@@ -17,7 +17,5 @@
   "css.validate": false,
   "scss.validate": false,
 
-  "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"],
-
-  "unocss.root": "apps/client"
+  "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"]
 }
