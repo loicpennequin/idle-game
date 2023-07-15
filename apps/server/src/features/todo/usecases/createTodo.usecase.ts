@@ -1,9 +1,6 @@
 import { TODO_EVENTS, todoContract } from '@daria/shared';
 import { ServerInferRequest } from '@ts-rest/core';
-import * as TE from 'fp-ts/TaskEither';
 import * as E from 'fp-ts/Either';
-import * as IO from 'fp-ts/IO';
-import { flow } from 'fp-ts/function';
 import { UnexpectedError } from '../../../utils/errorFactory';
 import { TodoRepository } from '../todo.repository';
 import { Io } from '../../core/io';

@@ -145,7 +145,7 @@ const createServerFeature = async (name: string) => {
     import { asFunction } from 'awilix';
     import { ${name}Mapper } from './${name}.mapper';
     import { ${name}Repository } from './${name}.repository';
-    import { getAll${capitalizedName}sUseCase } from './usecases/getall${capitalizedName}s.usecase';
+    import { getAll${capitalizedName}sUseCase } from './usecases/getAll${capitalizedName}s.usecase';
 
     export const ${name}Providers = {
       ${name}Repo: asFunction(${name}Repository),

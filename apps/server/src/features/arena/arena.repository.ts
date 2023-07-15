@@ -1,11 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import * as E from 'fp-ts/Either';
-import { UnexpectedError, errorFactory } from '../../utils/errorFactory';
+import { NotFoundError, UnexpectedError, errorFactory } from '../../utils/errorFactory';
 import { Arena } from './arena.entity';
-import { handlePrismaError } from '../../utils/prisma';
+import { handlePrismaError, prismaNotFoundMatchers } from '../../utils/prisma';
+import { UUID } from '@daria/shared';
 
 export type ArenaRepository = {
   findAll(): Promise<E.Either<UnexpectedError, Arena[]>>;
+  findById(id: UUID): Promise<E.Either<UnexpectedError | NotFoundError, Arena>>;
+  join(arg: { arenaId: UUID; heroId: UUID }): Promise<E.Either<UnexpectedError, Arena>>;
+  leave(arg: { arenaId: UUID; heroId: UUID }): Promise<E.Either<UnexpectedError, Arena>>;
 };
 
 export const arenaRepository = ({
@@ -21,6 +25,55 @@ export const arenaRepository = ({
         });
 
         return E.right(arenas);
+      } catch (err) {
+        return E.left(handlePrismaError()(err));
+      }
+    },
+
+    async findById(id) {
+      try {
+        const hero = await prisma.arena.findUniqueOrThrow({
+          where: { id },
+          include: { heroes: true }
+        });
+
+        return E.right(hero);
+      } catch (err) {
+        return E.left(handlePrismaError(prismaNotFoundMatchers)(err));
+      }
+    },
+
+    async join({ arenaId, heroId }) {
+      try {
+        const arena = await prisma.arena.update({
+          where: { id: arenaId },
+          include: { heroes: true },
+          data: {
+            heroes: {
+              connect: { id: heroId }
+            }
+          }
+        });
+        return E.right(arena);
+      } catch (err) {
+        return E.left(handlePrismaError()(err));
+      }
+    },
+
+    async leave({ arenaId, heroId }) {
+      try {
+        const arena = await prisma.arena.update({
+          where: { id: arenaId },
+          include: { heroes: true },
+          data: {
+            heroes: {
+              delete: {
+                id: heroId
+              }
+            }
+          }
+        });
+        return E.right(arena);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }

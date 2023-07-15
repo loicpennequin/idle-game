@@ -14,6 +14,29 @@ export const arenaContract = c.router(
         200: ArenaResponse.array(),
         500: ErrorResponse
       }
+    },
+    join: {
+      method: 'POST',
+      path: '/:arenaId/join',
+      responses: {
+        200: ArenaResponse,
+        400: ErrorResponse,
+        500: ErrorResponse
+      },
+      body: z.object({
+        heroId: z.string()
+      })
+    },
+    leave: {
+      method: 'POST',
+      path: '/:arenaId/leave',
+      responses: {
+        200: ArenaResponse,
+        500: ErrorResponse
+      },
+      body: z.object({
+        heroId: z.string()
+      })
     }
   },
   {

@@ -21,9 +21,12 @@ type Dependencies = {
   todoMapper: TodoMapper;
 };
 
-export const toggleTodoUseCase =
-  ({ todoRepo, io, todoMapper }: Dependencies): ToggleTodoUseCase =>
-  async (id, completed) => {
+export const toggleTodoUseCase = ({
+  todoRepo,
+  io,
+  todoMapper
+}: Dependencies): ToggleTodoUseCase => {
+  return async (id, completed) => {
     const todo = await todoRepo.updateCompletedById(id, completed);
 
     if (E.isLeft(todo)) return todo;
@@ -32,3 +35,4 @@ export const toggleTodoUseCase =
 
     return todo;
   };
+};

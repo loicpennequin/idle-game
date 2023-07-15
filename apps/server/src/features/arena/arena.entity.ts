@@ -8,4 +8,5 @@ export type Arena = {
   name: string;
   maxslots: number;
   heroes: Hero[];
+  size: number;
 };

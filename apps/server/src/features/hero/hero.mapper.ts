@@ -9,7 +9,9 @@ export type HeroMapper = {
 export const heroMapper = (): HeroMapper => {
   const mapHero = (hero: Hero): HeroResponse => {
     return {
-      id: hero.id
+      id: hero.id,
+      name: hero.name,
+      owner: hero.owner
     };
   };
 
