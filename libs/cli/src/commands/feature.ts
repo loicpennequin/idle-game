@@ -240,7 +240,7 @@ const createClientFeature = async (name: string) => {
   const featureDir = resolve(clientRoot, 'features', name);
 
   const apiTemplate = dedent`
-  import { type ${capitalizedName}Response, type UUID } from '@daria/shared';
+  import { type ${capitalizedName}Response } from '@daria/shared';
   import { apiHandler } from '@/utils/api-helpers';
   import type { ApiClient } from '@/features/core/apiClient';
 
@@ -250,9 +250,8 @@ const createClientFeature = async (name: string) => {
 
   type Dependencies = {
     apiClient: ApiClient;
-    queryClient: QueryClient;
   };
-  export const ${name}Api = ({ apiClient, queryClient }: Dependencies): ${capitalizedName}Api => {
+  export const ${name}Api = ({ apiClient }: Dependencies): ${capitalizedName}Api => {
     return {
       getAll: () => apiHandler(apiClient.${name}.getAll),
     };

@@ -1,4 +1,4 @@
-import { type ArenaResponse, type UUID } from '@daria/shared';
+import { type ArenaResponse } from '@daria/shared';
 import { apiHandler } from '@/utils/api-helpers';
 import type { ApiClient } from '@/features/core/apiClient';
 
@@ -8,9 +8,8 @@ export type ArenaApi = {
 
 type Dependencies = {
   apiClient: ApiClient;
-  queryClient: QueryClient;
 };
-export const arenaApi = ({ apiClient, queryClient }: Dependencies): ArenaApi => {
+export const arenaApi = ({ apiClient }: Dependencies): ArenaApi => {
   return {
     getAll: () => apiHandler(apiClient.arena.getAll)
   };
