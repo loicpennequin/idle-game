@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@babakness/exhaustive-type-checking": "^0.1.3",
+    "@casl/ability": "^6.5.0",
+    "@casl/prisma": "^1.4.0",
     "@daria/shared": "*",
     "@prisma/client": "5",
     "@ts-rest/core": "^3.26.3",

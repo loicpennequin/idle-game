@@ -18,7 +18,7 @@ export const heroContract = c.router(
   },
   {
     strictStatusCodes: true,
-    pathPrefix: '/heros'
+    pathPrefix: '/heroes'
   }
 );
 

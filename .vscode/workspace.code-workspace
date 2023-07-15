@@ -2,6 +2,9 @@
   "folders": [
     {
       "path": ".."
+    },
+    {
+      "path": "../../../Users/Loïc/web/samsys/monorepo"
     }
   ],
   "settings": {

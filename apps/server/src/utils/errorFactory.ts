@@ -63,7 +63,7 @@ export type UnauthorizedError = AppError & {
 };
 
 export type ForbiddenError = AppError & {
-  statusCode: 422;
+  statusCode: 403;
 };
 
 export type NotFoundError = AppError & {

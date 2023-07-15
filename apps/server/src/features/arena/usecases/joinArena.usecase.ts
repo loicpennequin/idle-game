@@ -1,6 +1,6 @@
-import { Nullable, UUID } from '@daria/shared';
+import { UUID } from '@daria/shared';
+import { subject } from '@casl/ability';
 import {
-  BadRequestError,
   ForbiddenError,
   NotFoundError,
   UnexpectedError,
@@ -12,16 +12,14 @@ import { ArenaRepository } from '../arena.repository';
 import { isLeft, left } from 'fp-ts/Either';
 import { User } from '../../user/user.entity';
 import { HeroRepository } from '../../hero/hero.repository';
+import { HeroAbilityBuilder } from '../../hero/hero.ability';
+import { UserAbilityBuilder } from '../../user/user.ability';
 
 export type JoinArenaUseCaseInput = {
   arenaId: UUID;
   heroId: UUID;
 };
-export type JoinArenaUseCaseError =
-  | UnexpectedError
-  | BadRequestError
-  | NotFoundError
-  | ForbiddenError;
+export type JoinArenaUseCaseError = UnexpectedError | NotFoundError | ForbiddenError;
 
 export type JoinArenaUseCase = UseCase<
   JoinArenaUseCaseInput,
@@ -32,30 +30,34 @@ export type JoinArenaUseCase = UseCase<
 type Dependencies = {
   arenaRepo: ArenaRepository;
   heroRepo: HeroRepository;
+  heroAbilityBuilder: HeroAbilityBuilder;
+  userAbilityBuilder: UserAbilityBuilder;
   session: User;
 };
 
 export const joinArenaUseCase =
-  ({ arenaRepo, heroRepo, session }: Dependencies): JoinArenaUseCase =>
+  ({
+    arenaRepo,
+    heroRepo,
+    userAbilityBuilder,
+    heroAbilityBuilder,
+    session
+  }: Dependencies): JoinArenaUseCase =>
   async ({ arenaId, heroId }) => {
     const hero = await heroRepo.findById(heroId);
     if (isLeft(hero)) return hero;
 
-    if (session.id !== hero.right.id) {
+    const userAbility = userAbilityBuilder.buildFor(session);
+    if (userAbility.can('edit', subject('Hero', hero.right))) {
       return left(errorFactory.forbidden());
     }
 
     const arena = await arenaRepo.findById(arenaId);
     if (isLeft(arena)) return arena;
 
-    const isFull = arena.right.heroes.length === arena.right.maxslots;
-    if (isFull) return left(errorFactory.badRequest({ message: 'No slot available' }));
-
-    const hasAlreadyJoined = arena.right.heroes.some(hero => hero.id === heroId);
-    if (hasAlreadyJoined) {
-      return left(
-        errorFactory.badRequest({ message: `Hero ${heroId} is already in the arena` })
-      );
+    const heroAbility = heroAbilityBuilder.buildFor(hero.right);
+    if (heroAbility.can('join', subject('Arena', arena.right))) {
+      return left(errorFactory.forbidden());
     }
 
     return arenaRepo.join({ arenaId, heroId });
