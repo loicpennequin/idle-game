@@ -18,7 +18,7 @@ export const apiHandler = <TFn extends GenericApiFunction>(
   Exclude<Awaited<ReturnType<TFn>>, { status: ErrorHttpStatusCode }>['body']
 > => {
   return fn(...args).then(response => {
-    if (isApiError(response)) throw response;
+    if (isApiError(response)) throw response.body;
 
     return response.body;
   });
