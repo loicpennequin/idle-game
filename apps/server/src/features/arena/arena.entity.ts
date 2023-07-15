@@ -9,4 +9,6 @@ export type Arena = {
   maxslots: number;
   heroes: Hero[];
   size: number;
+  minLevel: number;
+  maxLevel: number;
 };

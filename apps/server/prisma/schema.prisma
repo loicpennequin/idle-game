@@ -38,6 +38,7 @@ model Hero {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   name      String
+  level     Int
   ownerId   String
   owner     User      @relation(fields: [ownerId], references: [id])
   arenaId   String?
@@ -51,5 +52,7 @@ model Arena {
   name      String    @unique
   maxslots  Int
   size      Int
+  minLevel  Int
   heroes    Hero[]
+  maxLevel  Int
 }

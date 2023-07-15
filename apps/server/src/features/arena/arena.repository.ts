@@ -21,7 +21,7 @@ export const arenaRepository = ({
     async findAll() {
       try {
         const arenas = await prisma.arena.findMany({
-          include: { heroes: true }
+          include: { heroes: { include: { owner: true } } }
         });
 
         return E.right(arenas);
@@ -34,7 +34,7 @@ export const arenaRepository = ({
       try {
         const hero = await prisma.arena.findUniqueOrThrow({
           where: { id },
-          include: { heroes: true }
+          include: { heroes: { include: { owner: true } } }
         });
 
         return E.right(hero);
@@ -47,7 +47,7 @@ export const arenaRepository = ({
       try {
         const arena = await prisma.arena.update({
           where: { id: arenaId },
-          include: { heroes: true },
+          include: { heroes: { include: { owner: true } } },
           data: {
             heroes: {
               connect: { id: heroId }
@@ -64,7 +64,7 @@ export const arenaRepository = ({
       try {
         const arena = await prisma.arena.update({
           where: { id: arenaId },
-          include: { heroes: true },
+          include: { heroes: { include: { owner: true } } },
           data: {
             heroes: {
               delete: {

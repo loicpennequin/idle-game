@@ -6,5 +6,6 @@ export type HeroId = UUID;
 export type Hero = {
   id: HeroId;
   name: string;
-  ownerId: UUID;
+  owner: User;
+  level: number;
 };

@@ -11,7 +11,8 @@ export const heroMapper = (): HeroMapper => {
     return {
       id: hero.id,
       name: hero.name,
-      owner: hero.owner
+      owner: hero.owner,
+      level: hero.level
     };
   };
 

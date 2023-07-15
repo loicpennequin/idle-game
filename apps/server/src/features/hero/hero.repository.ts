@@ -14,7 +14,7 @@ export const heroRepository = ({ prisma }: { prisma: PrismaClient }): HeroReposi
   return {
     async findAll() {
       try {
-        const heroes = await prisma.hero.findMany();
+        const heroes = await prisma.hero.findMany({ include: { owner: true } });
 
         return E.right(heroes);
       } catch (err) {
@@ -25,7 +25,8 @@ export const heroRepository = ({ prisma }: { prisma: PrismaClient }): HeroReposi
     async findById(id) {
       try {
         const hero = await prisma.hero.findUniqueOrThrow({
-          where: { id }
+          where: { id },
+          include: { owner: true }
         });
 
         return E.right(hero);

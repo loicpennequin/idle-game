@@ -2,8 +2,9 @@ import { z } from 'zod';
 import { UserResponse } from '../user';
 
 export const HeroResponse = z.object({
-  id: z.string(),
+  id: z.string().cuid(),
   name: z.string(),
-  owner: UserResponse
+  owner: UserResponse,
+  level: z.number()
 });
 export type HeroResponse = z.infer<typeof HeroResponse>;

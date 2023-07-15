@@ -21,6 +21,7 @@ export const arenaContract = c.router(
       responses: {
         200: ArenaResponse,
         400: ErrorResponse,
+        403: ErrorResponse,
         404: ErrorResponse,
         500: ErrorResponse
       },
@@ -34,6 +35,7 @@ export const arenaContract = c.router(
       responses: {
         200: ArenaResponse,
         400: ErrorResponse,
+        403: ErrorResponse,
         404: ErrorResponse,
         500: ErrorResponse
       },

@@ -13,7 +13,9 @@ export const arenaMapper = (): ArenaMapper => {
       name: arena.name,
       maxSlots: arena.maxslots,
       availableSlots: arena.maxslots - arena.heroes.length,
-      size: arena.size
+      size: arena.size,
+      minLevel: arena.minLevel,
+      maxLevel: arena.maxLevel
     };
   };
 
