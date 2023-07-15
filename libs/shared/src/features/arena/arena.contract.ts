@@ -21,6 +21,7 @@ export const arenaContract = c.router(
       responses: {
         200: ArenaResponse,
         400: ErrorResponse,
+        404: ErrorResponse,
         500: ErrorResponse
       },
       body: z.object({
@@ -32,6 +33,8 @@ export const arenaContract = c.router(
       path: '/:arenaId/leave',
       responses: {
         200: ArenaResponse,
+        400: ErrorResponse,
+        404: ErrorResponse,
         500: ErrorResponse
       },
       body: z.object({

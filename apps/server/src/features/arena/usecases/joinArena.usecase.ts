@@ -1,6 +1,7 @@
 import { UUID } from '@daria/shared';
 import {
   BadRequestError,
+  NotFoundError,
   UnexpectedError,
   errorFactory
 } from '../../../utils/errorFactory';
@@ -13,8 +14,7 @@ export type JoinArenaUseCaseInput = {
   arenaId: UUID;
   heroId: UUID;
 };
-
-export type JoinArenaUseCaseError = UnexpectedError | BadRequestError;
+export type JoinArenaUseCaseError = UnexpectedError | BadRequestError | NotFoundError;
 
 export type JoinArenaUseCase = UseCase<
   JoinArenaUseCaseInput,
@@ -28,13 +28,10 @@ export const joinArenaUseCase =
   ({ arenaRepo }: Dependencies): JoinArenaUseCase =>
   async ({ arenaId, heroId }) => {
     const arena = await arenaRepo.findById(arenaId);
-    if (isLeft(arena)) {
-      return left(errorFactory.badRequest({ message: `no arena with id ${arenaId}` }));
-    }
+    if (isLeft(arena)) return arena;
 
-    if (arena.right.heroes.length === arena.right.maxslots) {
-      return left(errorFactory.badRequest({ message: 'No slot available' }));
-    }
+    const isFull = arena.right.heroes.length === arena.right.maxslots;
+    if (isFull) return left(errorFactory.badRequest({ message: 'No slot available' }));
 
     return arenaRepo.join({ arenaId, heroId });
   };
