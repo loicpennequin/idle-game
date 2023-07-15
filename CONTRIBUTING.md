@@ -58,7 +58,7 @@ There are two ways to get started with the project locally
 2. Navigate to the project directory
 
    ```sh
-   cd code-racer
+   cd idle-game
    ```
 
 3. Run the following command to install dependencies
