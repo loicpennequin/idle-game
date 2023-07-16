@@ -6,7 +6,7 @@ export type ArenaId = UUID;
 export type Arena = {
   id: ArenaId;
   name: string;
-  maxslots: number;
+  maxSlots: number;
   heroes: Hero[];
   size: number;
   minLevel: number;

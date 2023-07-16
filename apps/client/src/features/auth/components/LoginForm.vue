@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { authContract } from '@daria/shared';
+import { toTypedSchema } from '@vee-validate/zod';
+
 const {
   mutate: signup,
   isLoading,
@@ -6,24 +9,35 @@ const {
   error
 } = useLogin({
   onSuccess() {
-    email.value = '';
-    password.value = '';
+    form.resetForm();
   }
 });
 
-const email = ref('');
-const password = ref('');
+const form = useForm({
+  validationSchema: toTypedSchema(authContract.login.body)
+});
+
+const onSubmit = form.handleSubmit(values => signup(values));
 </script>
 
 <template>
-  <form @submit.prevent="signup({ email, password })">
-    <fieldset>
+  <form @submit.prevent="onSubmit">
+    <UiFormControl v-slot="{ error, inputProps }" name="email">
       <UiFormLabel for="login-email">E-mail</UiFormLabel>
-      <UiTextInput id="login-email" type="email" v-model="email" required />
-    </fieldset>
+      <UiTextInput
+        v-bind="inputProps"
+        id="login-email"
+        type="email"
+        left-icon="mdi-email-outline"
+      />
+      <UiFormError :error="error" />
+    </UiFormControl>
 
-    <UiFormLabel for="login-password">Password</UiFormLabel>
-    <UiTextInput id="login-password" type="password" v-model="password" required />
+    <UiFormControl v-slot="{ error, inputProps }" name="password">
+      <UiFormLabel for="password">password</UiFormLabel>
+      <UiPasswordInput id="password" v-bind="inputProps" left-icon="mdi:lock-outline" />
+      <UiFormError :error="error" />
+    </UiFormControl>
 
     <UiButton :disabled="isLoading">Sign up</UiButton>
     <UiFormError :error="error?.message" />

@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ArenaList: typeof import('./src/features/arena/components/ArenaList.vue')['default']
     LoginForm: typeof import('./src/features/auth/components/LoginForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

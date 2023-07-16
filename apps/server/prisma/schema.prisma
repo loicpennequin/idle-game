@@ -7,14 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id        String    @id @unique @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  text      String
-  completed Boolean
-}
-
 model User {
   id           String        @id @unique @default(cuid())
   email        String        @unique
@@ -51,7 +43,7 @@ model Arena {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   name      String    @unique
-  maxslots  Int
+  maxSlots  Int
   size      Int
   minLevel  Int
   heroes    Hero[]

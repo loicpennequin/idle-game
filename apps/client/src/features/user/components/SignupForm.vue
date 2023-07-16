@@ -10,13 +10,9 @@ const {
   error
 } = useSignup({
   onSuccess() {
-    email.value = '';
-    password.value = '';
+    form.resetForm();
   }
 });
-
-const email = ref('');
-const password = ref('');
 
 const form = useForm({
   validationSchema: toTypedSchema(

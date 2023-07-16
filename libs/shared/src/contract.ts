@@ -6,7 +6,6 @@ import { initContract } from '@ts-rest/core';
 import { arenaContract } from './features/arena';
 import { authContract } from './features/auth';
 import { heroContract } from './features/hero';
-import { todoContract } from './features/todo';
 import { userContract } from './features/user';
 
 const c = initContract();
@@ -16,7 +15,6 @@ export const contract = c.router(
     arena: arenaContract,
     auth: authContract,
     hero: heroContract,
-    todo: todoContract,
     user: userContract
   },
   {

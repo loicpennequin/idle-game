@@ -1,7 +1,8 @@
-import { PureAbility, AbilityBuilder, ForcedSubject } from '@casl/ability';
+import { PureAbility, ForcedSubject, FieldMatcher } from '@casl/ability';
 import { Hero } from '../hero/hero.entity';
 import { User } from '@prisma/client';
 import { Nullable } from '@daria/shared';
+import { createAbility } from '../../utils/casl';
 
 type Abilities =
   | ['edit', 'Hero' | (Hero & ForcedSubject<'Hero'>)]
@@ -12,20 +13,20 @@ export type UserAbilityBuilder = {
   buildFor(user: Nullable<User>): UserAbility;
 };
 
+export const fieldMatcher: FieldMatcher = fields => field => fields.includes(field);
+
 export const userAbilityBuilder = (): UserAbilityBuilder => {
   return {
     buildFor(user) {
-      const { can, build } = new AbilityBuilder<UserAbility>(PureAbility);
+      return createAbility<UserAbility>(({ can }) => {
+        can('edit', 'Hero', (subject: Hero) => {
+          return subject.owner.id === user?.id;
+        });
 
-      can('edit', 'Hero', (subject: Hero) => {
-        return subject.owner.id === user?.id;
+        can('read', 'User', 'email', (subject: User) => {
+          return subject.id === user?.id;
+        });
       });
-
-      can('read', 'User', 'email', (subject: User) => {
-        return subject.id === user?.id;
-      });
-
-      return build();
     }
   };
 };

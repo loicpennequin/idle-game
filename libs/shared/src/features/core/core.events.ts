@@ -1,3 +1,1 @@
-import type { TodoIoEvents } from '../todo';
-
-export type IoEvents = TodoIoEvents;
+export type IoEvents = {};

@@ -4,6 +4,7 @@
   "version": "3.1.0",
   "main": "src/index.ts",
   "scripts": {
+    "predev": "yarn db:sync && yarn db:seed",
     "dev": "dotenv -c -- cross-env NODE_ENV=development tsx watch src/index.ts",
     "type-check": "tsc --noEmit -p tsconfig.json",
     "build": "esbuild src/index.ts --platform=node --bundle  --outfile=dist/index.js",
@@ -14,10 +15,13 @@
     "db:sync": "yarn prisma generate && yarn prisma db push",
     "db:migrate": "dotenv -c -- prisma migrate dev",
     "db:ui": "dotenv -c -- prisma studio",
+    "db:seed": "dotenv -c -- prisma db seed",
     "db:start": "docker-compose up -d",
     "db:stop": "docker-compose down",
-    "db:reset": "docker-compose down -v",
-    "db:seed": "dotenv -c -- prisma db seed"
+    "db:reset": "docker-compose down -v"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} --transpile-only prisma/seed.ts"
   },
   "dependencies": {
     "@babakness/exhaustive-type-checking": "^0.1.3",

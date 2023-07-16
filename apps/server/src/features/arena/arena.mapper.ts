@@ -11,8 +11,8 @@ export const arenaMapper = (): ArenaMapper => {
     return {
       id: arena.id,
       name: arena.name,
-      maxSlots: arena.maxslots,
-      availableSlots: arena.maxslots - arena.heroes.length,
+      maxSlots: arena.maxSlots,
+      availableSlots: arena.maxSlots - arena.heroes.length,
       size: arena.size,
       minLevel: arena.minLevel,
       maxLevel: arena.maxLevel

@@ -50,7 +50,11 @@ export const arenaRepository = ({
           include: { heroes: { include: { owner: true } } },
           data: {
             heroes: {
-              connect: { id: heroId }
+              connect: { id: heroId },
+              set: {
+                id: heroId,
+                joinedArenaAt: new Date()
+              }
             }
           }
         });
@@ -69,6 +73,10 @@ export const arenaRepository = ({
             heroes: {
               delete: {
                 id: heroId
+              },
+              set: {
+                id: heroId,
+                joinedArenaAt: null
               }
             }
           }

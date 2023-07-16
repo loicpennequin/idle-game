@@ -11,7 +11,6 @@ import { arenaProviders } from './features/arena/arena.providers';
 import { authProviders } from './features/auth/auth.providers';
 import { coreProviders } from './features/core/core.providers';
 import { heroProviders } from './features/hero/hero.providers';
-import { todoProviders } from './features/todo/todo.providers';
 import { userProviders } from './features/user/user.providers';
 
 const dependencies = {
@@ -23,7 +22,6 @@ const dependencies = {
   ...authProviders,
   ...coreProviders,
   ...heroProviders,
-  ...todoProviders,
   ...userProviders
 };
 

@@ -16,6 +16,15 @@ export const arenaRouter = s.router(contract.arena, {
     );
   },
 
+  async getById({ req: { container } }) {
+    return {
+      status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      body: container.errorMapper.toResponse(
+        errorFactory.unexpected({ message: 'Not Implemented.' })
+      )
+    };
+  },
+
   async join({ params, body, req: { container } }) {
     return pipe(
       await container.joinArenaUseCase({

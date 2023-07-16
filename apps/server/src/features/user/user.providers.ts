@@ -7,7 +7,7 @@ import { userAbilityBuilder } from './user.ability';
 export const userProviders = {
   userRepo: asFunction(userRepository),
   userMapper: asFunction(userMapper),
-  userAbility: asFunction(userAbilityBuilder),
+  userAbilityBuilder: asFunction(userAbilityBuilder),
 
   signupUseCase: asFunction(signupUseCase)
 };

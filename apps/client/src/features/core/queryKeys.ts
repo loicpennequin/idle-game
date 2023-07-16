@@ -6,7 +6,6 @@ import { mergeQueryKeys, type inferQueryKeyStore } from '@lukemorales/query-key-
 import { arenaKeys } from '../arena/utils/arena.keys';
 import { authKeys } from '../auth/utils/auth.keys';
 import { heroKeys } from '../hero/utils/hero.keys';
-import { todoKeys } from '../todo/utils/todo.keys';
 
-export const queryKeys = mergeQueryKeys(arenaKeys, authKeys, heroKeys, todoKeys);
+export const queryKeys = mergeQueryKeys(arenaKeys, authKeys, heroKeys);
 export type QueryKeys = inferQueryKeyStore<typeof queryKeys>;

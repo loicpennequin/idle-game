@@ -12,7 +12,7 @@ import { UUID } from '@daria/shared';
 import { RefreshToken } from '../auth/token.service';
 
 export type UserRepository = {
-  create(data: {
+  create(user: {
     email: string;
     passwordHash: string;
   }): Promise<E.Either<UnexpectedError | BadRequestError, User>>;
@@ -25,13 +25,15 @@ export type UserRepository = {
 
 export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserRepository => {
   return {
-    async create(data) {
+    async create(userData) {
       try {
-        const todo = await prisma.user.create({
-          data
+        const user = await prisma.user.create({
+          data: {
+            ...userData
+          }
         });
 
-        return E.right(todo);
+        return E.right(user);
       } catch (err) {
         return E.left(handlePrismaError(prismaNotUniqueMatchers)(err));
       }
@@ -39,9 +41,9 @@ export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserReposi
 
     async findById(id) {
       try {
-        const todo = await prisma.user.findUnique({ where: { id } });
+        const user = await prisma.user.findUnique({ where: { id } });
 
-        return E.fromNullable(errorFactory.notFound)(todo);
+        return E.fromNullable(errorFactory.notFound)(user);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }
@@ -49,9 +51,9 @@ export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserReposi
 
     async findByEmail(email) {
       try {
-        const todo = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({ where: { email } });
 
-        return E.fromNullable(errorFactory.notFound)(todo);
+        return E.fromNullable(errorFactory.notFound)(user);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }
@@ -59,9 +61,9 @@ export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserReposi
 
     async findByRefreshToken(value) {
       try {
-        const todo = await prisma.refreshToken.findUnique({ where: { value } }).user();
+        const user = await prisma.refreshToken.findUnique({ where: { value } }).user();
 
-        return E.fromNullable(errorFactory.notFound)(todo);
+        return E.fromNullable(errorFactory.notFound)(user);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }

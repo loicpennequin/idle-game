@@ -16,6 +16,16 @@ export const arenaContract = c.router(
       },
       metadata: { public: true }
     },
+    getById: {
+      method: 'GET',
+      path: '/:arenaId',
+      responses: {
+        200: ArenaResponse,
+        404: ErrorResponse,
+        500: ErrorResponse
+      },
+      metadata: { public: true }
+    },
     join: {
       method: 'POST',
       path: '/:arenaId/join',
