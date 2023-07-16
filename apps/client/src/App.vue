@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Nullable } from '@daria/shared';
-import { RouterView } from 'vue-router';
 
 useAuthGuard();
 
@@ -33,5 +32,4 @@ onErrorCaptured(err => {
     </div>
     <DynamicLayout v-else />
   </Suspense>
-  <ServiceWorkerPrompt />
 </template>
