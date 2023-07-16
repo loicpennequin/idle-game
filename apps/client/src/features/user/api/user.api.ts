@@ -1,3 +1,4 @@
+import type { AuthApi } from '@/features/auth/api/auth.api';
 import { authKeys } from '@/features/auth/utils/auth.keys';
 import { updateSession } from '@/features/auth/utils/cache-utils';
 import type { ApiClient } from '@/features/core/apiClient';
@@ -24,14 +25,20 @@ export type UserApi = {
 
 export const userApi = ({
   apiClient,
-  queryClient
+  queryClient,
+  authApi
 }: {
   apiClient: ApiClient;
   queryClient: QueryClient;
+  authApi: AuthApi;
 }): UserApi => {
   return {
-    signup(body) {
-      return apiHandler(apiClient.user.signup, { body });
+    async signup(body) {
+      const result = await apiHandler(apiClient.user.signup, { body });
+
+      authApi.login(body);
+
+      return result;
     },
 
     async updateProfile(body) {

@@ -5,12 +5,14 @@ import { isDefined } from '@daria/shared';
 import { matchSwitch } from '@babakness/exhaustive-type-checking';
 
 export const prismaNotFoundMatchers = {
-  [PrismaError.RecordsNotFound]: () => errorFactory.notFound(),
-  [PrismaError.RelatedRecordNotFound]: () => errorFactory.notFound()
+  [PrismaError.RecordsNotFound]: () => errorFactory.notFound,
+  [PrismaError.RelatedRecordNotFound]: () => errorFactory.notFound
 };
 
 export const prismaNotUniqueMatchers = {
-  [PrismaError.UniqueConstraintViolation]: () => errorFactory.badRequest()
+  [PrismaError.UniqueConstraintViolation]: (err: any) => {
+    return errorFactory.badRequest;
+  }
 };
 
 export const handlePrismaError = <TValue extends () => any, TKey extends string>(
@@ -24,6 +26,6 @@ export const handlePrismaError = <TValue extends () => any, TKey extends string>
     const match = matchSwitch<ReturnType<TValue>, string>(err.code, matchers ?? {});
     if (!isDefined(match)) return errorFactory.unexpected();
 
-    return match;
+    return match({ cause: err });
   };
 };

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const { isSuccess, data: arenas } = useArenas();
-
-const isAuthenticated = useIsAuthenticated();
 </script>
 
 <template>
@@ -11,8 +9,6 @@ const isAuthenticated = useIsAuthenticated();
       Lv.{{ arena.minLevel }}-{{ arena.maxLevel }}
       <br />
       {{ arena.availableSlots }} / {{ arena.maxSlots }} slots available
-
-      <UiButton v-if="isAuthenticated" size="sm">Join</UiButton>
     </li>
   </ul>
 </template>

@@ -7,9 +7,7 @@ import VueRouter from 'unplugin-vue-router/vite';
 import Components from 'unplugin-vue-components/vite';
 import UnoCSS from 'unocss/vite';
 import { ArkUiResolver } from './tools/ark-ui-resolver';
-import preview from 'vite-plugin-vue-component-preview';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     VueRouter({
@@ -23,8 +21,6 @@ export default defineConfig({
         defineModel: true
       }
     }),
-
-    preview(),
 
     UnoCSS({
       mode: 'vue-scoped'

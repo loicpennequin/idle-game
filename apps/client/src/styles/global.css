@@ -27,7 +27,6 @@ body {
 
 @media (--mouse) {
   a:hover {
-    color: var(--link);
     text-decoration: underline;
   }
 }

@@ -2,12 +2,22 @@
 import { definePage } from 'vue-router/auto';
 
 definePage({
-  name: 'Login'
+  name: 'Login',
+  meta: {
+    publicOnly: true
+  }
 });
 </script>
 
 <template>
-  <div>login page</div>
-</template>
+  <main class="grid place-content-center">
+    <section class="surface">
+      <h2>Login</h2>
+      <LoginForm />
 
-<style scoped lang="postcss"></style>
+      <RouterLink v-slot="{ href, navigate }" custom :to="{ name: 'Register' }">
+        <UiLinkButton :href="href" @click="navigate">I dont have an account</UiLinkButton>
+      </RouterLink>
+    </section>
+  </main>
+</template>

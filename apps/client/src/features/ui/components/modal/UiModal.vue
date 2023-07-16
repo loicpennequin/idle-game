@@ -35,23 +35,21 @@ const vModel = computed({
   >
     <slot name="trigger" v-bind="triggerProps" />
 
-    <ClientOnly>
-      <Teleport to="body">
-        <Transition :duration="500">
-          <div v-if="isOpen" class="wrapper">
-            <ArkDialogBackdrop />
-            <ArkDialogContainer>
-              <ArkDialogContent
-                class="surface p-0"
-                :class="!isClosable && 'ui-modal-not-closable'"
-              >
-                <slot name="content" :is-open="isOpen" :open="open" :close="close" />
-              </ArkDialogContent>
-            </ArkDialogContainer>
-          </div>
-        </Transition>
-      </Teleport>
-    </ClientOnly>
+    <Teleport to="body">
+      <Transition :duration="500">
+        <div v-if="isOpen" class="wrapper">
+          <ArkDialogBackdrop />
+          <ArkDialogContainer>
+            <ArkDialogContent
+              class="surface p-0"
+              :class="!isClosable && 'ui-modal-not-closable'"
+            >
+              <slot name="content" :is-open="isOpen" :open="open" :close="close" />
+            </ArkDialogContent>
+          </ArkDialogContainer>
+        </div>
+      </Transition>
+    </Teleport>
   </ArkDialog>
 </template>
 

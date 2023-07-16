@@ -9,25 +9,18 @@ const { id, direction = 'left' } = defineProps<{
   <ArkDialog :id="id" v-slot="{ isOpen, open, close, triggerProps }" modal>
     <slot name="trigger" v-bind="triggerProps" />
 
-    <ClientOnly>
-      <Teleport to="body">
-        <Transition :duration="500">
-          <div v-if="isOpen" class="wrapper">
-            <ArkDialogBackdrop />
-            <ArkDialogContainer :class="direction">
-              <ArkDialogContent class="surface p-0">
-                <slot
-                  name="content"
-                  :is-open="isOpen"
-                  :open="open"
-                  :close="close"
-                />
-              </ArkDialogContent>
-            </ArkDialogContainer>
-          </div>
-        </Transition>
-      </Teleport>
-    </ClientOnly>
+    <Teleport to="body">
+      <Transition :duration="500">
+        <div v-if="isOpen" class="wrapper">
+          <ArkDialogBackdrop />
+          <ArkDialogContainer :class="direction">
+            <ArkDialogContent class="surface p-0">
+              <slot name="content" :is-open="isOpen" :open="open" :close="close" />
+            </ArkDialogContent>
+          </ArkDialogContainer>
+        </div>
+      </Transition>
+    </Teleport>
   </ArkDialog>
 </template>
 

@@ -41,7 +41,13 @@ export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserReposi
       try {
         const user = await prisma.user.create({
           data: {
-            ...userData
+            ...userData,
+            heroes: {
+              create: {
+                name: 'My First hero',
+                level: 1
+              }
+            }
           }
         });
 

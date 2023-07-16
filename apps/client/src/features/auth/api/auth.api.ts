@@ -13,6 +13,7 @@ import {
 } from '@daria/shared';
 import type { QueryClient } from '@tanstack/vue-query';
 import { queryKeys } from '@/features/core/queryKeys';
+import { updateSession } from '../utils/cache-utils';
 
 export type LoginRequest = ClientInferRequest<AuthContract['login']>;
 export type LoginResponse = ClientInferResponses<AuthContract['login'], 200>;
@@ -147,6 +148,7 @@ export const authApi = ({ apiClient, queryClient, http }: Dependencies): AuthApi
     async logout() {
       const response = await apiHandler(apiClient.auth.logout);
       setToken(null);
+      updateSession(queryClient, null);
 
       return response;
     },

@@ -17,6 +17,7 @@ declare module 'vue' {
     ArkDialogTitle: typeof import('@ark-ui/vue')['DialogTitle']
     DarkModeToggle: typeof import('./src/features/core/components/DarkModeToggle.vue')['default']
     DarkMpdeToggle: typeof import('./src/features/core/components/DarkMpdeToggle.vue')['default']
+    DynamicLayout: typeof import('./src/features/core/components/DynamicLayout.vue')['default']
     LoginForm: typeof import('./src/features/auth/components/LoginForm.vue')['default']
     OnboardingModal: typeof import('./src/features/user/components/OnboardingModal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

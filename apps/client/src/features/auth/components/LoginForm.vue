@@ -5,7 +5,6 @@ import { toTypedSchema } from '@vee-validate/zod';
 const {
   mutate: signup,
   isLoading,
-  isSuccess,
   error
 } = useLogin({
   onSuccess() {
@@ -43,9 +42,8 @@ const onSubmit = form.handleSubmit(values => signup(values));
       <UiFormError :error="error" />
     </UiFormControl>
 
-    <UiButton :disabled="isLoading">Sign up</UiButton>
+    <UiButton is-cta :disabled="isLoading">Sign up</UiButton>
     <UiFormError :error="error?.message" />
-    <p v-if="isSuccess">Login successful</p>
   </form>
 </template>
 

@@ -6,7 +6,6 @@ import { string } from 'zod';
 const {
   mutate: signup,
   isLoading,
-  isSuccess,
   error
 } = useSignup({
   onSuccess() {
@@ -53,9 +52,8 @@ const onSubmit = form.handleSubmit(values => signup(values));
       <UiFormError :error="error" />
     </UiFormControl>
 
-    <UiButton :disabled="isLoading">Sign up</UiButton>
+    <UiButton is-cta :disabled="isLoading">Sign up</UiButton>
     <UiFormError :error="error?.message" />
-    <p v-if="isSuccess">Sign up successful</p>
   </form>
 </template>
 

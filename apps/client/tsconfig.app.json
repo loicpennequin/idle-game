@@ -15,8 +15,5 @@
     "paths": {
       "@/*": ["./src/*"]
     }
-  },
-  "vueCompilerOptions": {
-    "plugins": ["vite-plugin-vue-component-preview/tooling"]
   }
 }

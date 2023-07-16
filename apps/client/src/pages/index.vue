@@ -4,40 +4,23 @@ import { definePage } from 'vue-router/auto';
 definePage({
   name: 'Home'
 });
-
-const isAuthenticated = useIsAuthenticated();
-
-const { mutate, isLoading } = useLogout();
-
-const { data: session } = useSession();
 </script>
 
 <template>
   <main class="container">
+    <section class="hero">
+      <div class="surface">
+        <p>Thousands of players are already battling each other</p>
+
+        <UiButton :to="{ name: 'Register' }" style="--button-size: var(--font-size-4)">
+          Join them
+        </UiButton>
+      </div>
+    </section>
     <section class="full-width">
       <h2>Arenas</h2>
       <ArenaList />
     </section>
-    <section v-if="isAuthenticated">
-      <section>
-        <p v-if="session">Hello, {{ session.name }}</p>
-        <UiButton v-if="isAuthenticated" :disabled="isLoading" @click="mutate(undefined)">
-          Log out
-        </UiButton>
-      </section>
-    </section>
-
-    <template v-else>
-      <section class="surface">
-        <h2>Login</h2>
-        <LoginForm />
-      </section>
-
-      <section class="surface">
-        <h2>Sign up</h2>
-        <SignupForm />
-      </section>
-    </template>
   </main>
 </template>
 
@@ -46,20 +29,20 @@ main {
   --container-size: var(--size-xl);
 }
 
-@media (min-width: 48em) {
-  main {
+.hero {
+  @screen md {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--size-4);
+    grid-template-columns: 1fr 2fr;
+  }
 
-    > .surface {
-      padding: var(--size-5);
-      border: solid var(--border-size-1) var(--border-dimmed);
+  > .surface {
+    display: grid;
+    gap: var(--size-5);
+    justify-items: flex-start;
+    padding: var(--size-12) var(--size-8);
+    > p {
+      font-size: var(--font-size-4);
     }
   }
-}
-
-section.full-width {
-  grid-column: 1 / -1;
 }
 </style>

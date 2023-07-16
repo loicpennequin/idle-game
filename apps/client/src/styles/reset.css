@@ -17,7 +17,7 @@ p {
   max-inline-size: 100%;
 }
 
-a[href] {
+:where(a[href]) {
   color: inherit;
   text-decoration: none;
 }

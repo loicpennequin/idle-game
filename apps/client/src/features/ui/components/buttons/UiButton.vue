@@ -23,8 +23,10 @@ const props = defineProps<ButtonProps>();
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
       --button-bg: var(--gray-12);
+      --button-color: var(--gray-0);
       html.dark & {
         --button-bg: var(--blue-8);
+        --button-color: var(--gray-0);
       }
     }
   }

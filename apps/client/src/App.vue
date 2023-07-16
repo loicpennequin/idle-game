@@ -26,25 +26,12 @@ onErrorCaptured(err => {
 <template>
   <Suspense>
     <template #fallback>Loading...</template>
+
     <div v-if="error">
       <p>An error has occured</p>
       <button @click="error = null">Try again</button>
     </div>
-    <div v-else>
-      <OnboardingModal />
-      <header class="container" style="--container-size: var(--size-xl)">
-        <h1>Idle Game</h1>
-        <DarkModeToggle />
-      </header>
-      <RouterView />
-    </div>
+    <DynamicLayout v-else />
   </Suspense>
+  <ServiceWorkerPrompt />
 </template>
-
-<style scoped>
-header {
-  display: flex;
-  gap: var(--size-5);
-  align-items: center;
-}
-</style>
