@@ -14,7 +14,8 @@ export const userMapper = ({ userAbilityBuilder, session }: Dependencies): UserM
   const mapuser = (user: User, ability: UserAbility): UserResponse => {
     return {
       id: user.id,
-      email: ability.can('read', subject('User', user)) ? user.email : undefined
+      email: ability.can('read', subject('User', user)) ? user.email : undefined,
+      name: user.name
     };
   };
 

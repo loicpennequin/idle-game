@@ -305,6 +305,7 @@ declare global {
   const useToggle: typeof import('@vueuse/core')['useToggle']
   const useToggleTodo: typeof import('./src/features/todo/composables/queries')['useToggleTodo']
   const useTransition: typeof import('@vueuse/core')['useTransition']
+  const useUpdateProfile: typeof import('./src/features/user/composables/queries')['useUpdateProfile']
   const useUrlSearchParams: typeof import('@vueuse/core')['useUrlSearchParams']
   const useUserMedia: typeof import('@vueuse/core')['useUserMedia']
   const useVModel: typeof import('@vueuse/core')['useVModel']

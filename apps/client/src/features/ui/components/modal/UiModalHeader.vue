@@ -1,7 +1,7 @@
 <template>
   <ArkDialogTitle as-child>
     <header class="bg-inherit">
-      <slot />
+      <h2><slot /></h2>
       <ArkDialogCloseTrigger>
         <UiIconButton icon="material-symbols:close" title="close" />
       </ArkDialogCloseTrigger>
@@ -17,10 +17,12 @@ header {
   display: flex;
   justify-content: space-between;
 
-  padding: var(--size-2) var(--size-3);
+  padding: var(--size-4) var(--size-5);
 
-  font-size: var(--font-size-4);
-  font-weight: var(--font-weight-5);
+  > h2 {
+    font-size: var(--font-size-5);
+    font-weight: var(--font-weight-5);
+  }
 }
 
 [data-part='close-trigger'] {

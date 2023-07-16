@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import * as E from 'fp-ts/Either';
-import { handlePrismaError, prismaNotUniqueMatchers } from '../../utils/prisma';
+import {
+  handlePrismaError,
+  prismaNotFoundMatchers,
+  prismaNotUniqueMatchers
+} from '../../utils/prisma';
 import {
   BadRequestError,
   NotFoundError,
@@ -11,6 +15,10 @@ import { User } from './user.entity';
 import { UUID } from '@daria/shared';
 import { RefreshToken } from '../auth/token.service';
 
+export type UpdateProfileInput = {
+  name: string;
+};
+
 export type UserRepository = {
   create(user: {
     email: string;
@@ -20,6 +28,10 @@ export type UserRepository = {
   findByEmail(email: string): Promise<E.Either<UnexpectedError | NotFoundError, User>>;
   findByRefreshToken(
     token: RefreshToken
+  ): Promise<E.Either<UnexpectedError | NotFoundError, User>>;
+  updateProfileById(
+    id: UUID,
+    profile: UpdateProfileInput
   ): Promise<E.Either<UnexpectedError | NotFoundError, User>>;
 };
 
@@ -66,6 +78,19 @@ export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserReposi
         return E.fromNullable(errorFactory.notFound)(user);
       } catch (err) {
         return E.left(handlePrismaError()(err));
+      }
+    },
+
+    async updateProfileById(id, profile) {
+      try {
+        const user = await prisma.user.update({
+          where: { id },
+          data: profile
+        });
+
+        return E.right(user);
+      } catch (err) {
+        return E.left(handlePrismaError(prismaNotFoundMatchers)(err));
       }
     }
   };

@@ -8,9 +8,17 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ArenaList: typeof import('./src/features/arena/components/ArenaList.vue')['default']
+    ArkDialog: typeof import('@ark-ui/vue')['Dialog']
+    ArkDialogBackdrop: typeof import('@ark-ui/vue')['DialogBackdrop']
+    ArkDialogCloseTrigger: typeof import('@ark-ui/vue')['DialogCloseTrigger']
+    ArkDialogContainer: typeof import('@ark-ui/vue')['DialogContainer']
+    ArkDialogContent: typeof import('@ark-ui/vue')['DialogContent']
+    ArkDialogDescription: typeof import('@ark-ui/vue')['DialogDescription']
+    ArkDialogTitle: typeof import('@ark-ui/vue')['DialogTitle']
     DarkModeToggle: typeof import('./src/features/core/components/DarkModeToggle.vue')['default']
     DarkMpdeToggle: typeof import('./src/features/core/components/DarkMpdeToggle.vue')['default']
     LoginForm: typeof import('./src/features/auth/components/LoginForm.vue')['default']
+    OnboardingModal: typeof import('./src/features/user/components/OnboardingModal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SignupForm: typeof import('./src/features/user/components/SignupForm.vue')['default']

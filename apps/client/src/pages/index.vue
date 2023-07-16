@@ -20,7 +20,7 @@ const { data: session } = useSession();
     </section>
     <section v-if="isAuthenticated">
       <section>
-        <p v-if="session">Hello, {{ session.email }}</p>
+        <p v-if="session">Hello, {{ session.name }}</p>
         <UiButton v-if="isAuthenticated" :disabled="isLoading" @click="mutate(undefined)">
           Log out
         </UiButton>

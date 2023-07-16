@@ -19,6 +19,20 @@ export const userContract = c.router(
         email: z.string().email(),
         password: z.string()
       })
+    },
+    updateProfile: {
+      method: 'PATCH',
+      path: '/user/:userId/profile',
+      body: z.object({
+        name: z.string()
+      }),
+      responses: {
+        200: UserResponse,
+        400: ErrorResponse,
+        404: ErrorResponse,
+        403: ErrorResponse,
+        500: ErrorResponse
+      }
     }
   },
   {

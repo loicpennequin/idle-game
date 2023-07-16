@@ -31,6 +31,7 @@ onErrorCaptured(err => {
       <button @click="error = null">Try again</button>
     </div>
     <div v-else>
+      <OnboardingModal />
       <header class="container" style="--container-size: var(--size-xl)">
         <h1>Idle Game</h1>
         <DarkModeToggle />

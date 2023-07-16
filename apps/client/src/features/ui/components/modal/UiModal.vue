@@ -45,12 +45,7 @@ const vModel = computed({
                 class="surface p-0"
                 :class="!isClosable && 'ui-modal-not-closable'"
               >
-                <slot
-                  name="content"
-                  :is-open="isOpen"
-                  :open="open"
-                  :close="close"
-                />
+                <slot name="content" :is-open="isOpen" :open="open" :close="close" />
               </ArkDialogContent>
             </ArkDialogContainer>
           </div>
@@ -77,6 +72,7 @@ const vModel = computed({
     overflow-y: auto;
 
     width: var(--size-md);
+    max-width: 100%;
     max-height: 80%;
     margin: auto;
   }

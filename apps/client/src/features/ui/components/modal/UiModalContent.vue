@@ -1,6 +1,6 @@
 <template>
   <ArkDialogDescription as-child>
-    <div class="p-inline-3">
+    <div class="p-inline-5">
       <slot />
     </div>
   </ArkDialogDescription>

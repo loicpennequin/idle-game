@@ -12,3 +12,17 @@ export const useSignup = (
     mutationFn: userApi.signup
   });
 };
+
+export const useUpdateProfile = (
+  options: UseApiMutationOptions<
+    Contract['user']['updateProfile'],
+    UserApi['updateProfile']
+  > = {}
+) => {
+  const { userApi } = useContainer();
+
+  return createUseApiMutation<Contract['user']['updateProfile']>()({
+    ...options,
+    mutationFn: userApi.updateProfile
+  });
+};
