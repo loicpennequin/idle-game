@@ -1,4 +1,4 @@
-import { Nullable, UUID } from '@daria/shared';
+import { UUID } from '@daria/shared';
 import { User } from '../user/user.entity';
 import { ArenaId } from '../arena/arena.entity';
 
@@ -9,5 +9,6 @@ export type Hero = {
   name: string;
   owner: User;
   level: number;
-  arenaId: Nullable<ArenaId>;
+  arenaId: ArenaId | null;
+  joinedArenaAt: Date | null;
 };

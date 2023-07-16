@@ -52,7 +52,7 @@ export const createApp = ({
       (req, res, next) => {
         if ('metadata' in req.tsRestRoute) {
           const meta = req.tsRestRoute.metadata;
-          if (meta.needsAuth && !req.container.session) {
+          if (!meta.public && !req.container.session) {
             return res
               .status(401)
               .json(req.container.errorMapper.toResponse(errorFactory.unauthorized()));

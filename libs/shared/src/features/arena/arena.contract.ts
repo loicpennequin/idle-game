@@ -13,7 +13,8 @@ export const arenaContract = c.router(
       responses: {
         200: ArenaResponse.array(),
         500: ErrorResponse
-      }
+      },
+      metadata: { public: true }
     },
     join: {
       method: 'POST',

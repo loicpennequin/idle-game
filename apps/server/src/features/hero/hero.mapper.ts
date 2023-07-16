@@ -12,7 +12,9 @@ export const heroMapper = (): HeroMapper => {
       id: hero.id,
       name: hero.name,
       owner: hero.owner,
-      level: hero.level
+      level: hero.level,
+      arenaId: hero.arenaId,
+      joinedArenaAt: hero.joinedArenaAt
     };
   };
 
