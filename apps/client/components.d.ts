@@ -8,6 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ArenaList: typeof import('./src/features/arena/components/ArenaList.vue')['default']
+    DarkModeToggle: typeof import('./src/features/core/components/DarkModeToggle.vue')['default']
+    DarkMpdeToggle: typeof import('./src/features/core/components/DarkMpdeToggle.vue')['default']
     LoginForm: typeof import('./src/features/auth/components/LoginForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

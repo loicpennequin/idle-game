@@ -14,8 +14,6 @@ const { data: session } = useSession();
 
 <template>
   <main class="container">
-    <h1 class="col-span-2">Idle game</h1>
-
     <section class="full-width">
       <h2>Arenas</h2>
       <ArenaList />
@@ -46,7 +44,6 @@ const { data: session } = useSession();
 <style scoped lang="postcss">
 main {
   --container-size: var(--size-xl);
-  padding-inline: var(--size-3);
 }
 
 @media (min-width: 48em) {

@@ -34,8 +34,12 @@ const onSubmit = form.handleSubmit(values => signup(values));
     </UiFormControl>
 
     <UiFormControl v-slot="{ error, inputProps }" name="password">
-      <UiFormLabel for="password">password</UiFormLabel>
-      <UiPasswordInput id="password" v-bind="inputProps" left-icon="mdi:lock-outline" />
+      <UiFormLabel for="login-password">password</UiFormLabel>
+      <UiPasswordInput
+        id="login-password"
+        v-bind="inputProps"
+        left-icon="mdi:lock-outline"
+      />
       <UiFormError :error="error" />
     </UiFormControl>
 
