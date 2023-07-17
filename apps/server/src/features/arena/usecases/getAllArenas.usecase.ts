@@ -1,5 +1,5 @@
 import { UnexpectedError } from '../../../utils/errorFactory';
-import { Arena } from '../arena.entity';
+import { Arena } from '../entities/arena.entity';
 import { ArenaRepository } from '../arena.repository';
 import { UseCase } from '../../../utils/helpers';
 

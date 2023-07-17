@@ -25,13 +25,12 @@ definePage({
 </template>
 
 <style scoped lang="postcss">
-@import 'open-props/medias';
 main {
   --container-size: var(--size-xl);
 }
 
 .hero {
-  @media (--m-n-above) {
+  @screen md {
     display: grid;
     grid-template-columns: 1fr 2fr;
   }

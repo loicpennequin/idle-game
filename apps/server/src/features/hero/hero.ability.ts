@@ -1,5 +1,5 @@
 import { PureAbility, ForcedSubject } from '@casl/ability';
-import { Arena } from '../arena/arena.entity';
+import { Arena } from '../arena/entities/arena.entity';
 import { Hero } from './hero.entity';
 import { createAbility } from '../../utils/casl';
 

@@ -5,17 +5,20 @@ import { isDefined } from '@daria/shared';
 import { matchSwitch } from '@babakness/exhaustive-type-checking';
 
 export const prismaNotFoundMatchers = {
-  [PrismaError.RecordsNotFound]: () => errorFactory.notFound,
-  [PrismaError.RelatedRecordNotFound]: () => errorFactory.notFound
+  [PrismaError.RecordsNotFound]: () => (err: any) => errorFactory.notFound(err),
+  [PrismaError.RelatedRecordNotFound]: () => (err: any) => errorFactory.notFound(err)
 };
 
 export const prismaNotUniqueMatchers = {
-  [PrismaError.UniqueConstraintViolation]: (err: any) => {
+  [PrismaError.UniqueConstraintViolation]: () => {
     return errorFactory.badRequest;
   }
 };
 
-export const handlePrismaError = <TValue extends () => any, TKey extends string>(
+export const handlePrismaError = <
+  TValue extends () => (err: any) => any,
+  TKey extends string
+>(
   matchers?: Record<TKey, TValue>
 ) => {
   return (err: unknown) => {
@@ -23,7 +26,10 @@ export const handlePrismaError = <TValue extends () => any, TKey extends string>
       return errorFactory.unexpected({ cause: err instanceof Error ? err : undefined });
     }
 
-    const match = matchSwitch<ReturnType<TValue>, string>(err.code, matchers ?? {});
+    const match = matchSwitch<ReturnType<TValue>, string>(
+      err.code,
+      (matchers as any) ?? {}
+    );
     if (!isDefined(match)) return errorFactory.unexpected();
 
     return match({ cause: err });

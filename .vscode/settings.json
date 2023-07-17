@@ -6,7 +6,7 @@
 
   "cssvar.ignore": [],
 
-  "cssvar.extensions": ["css", "postcss", "jsx", "tsx", "vue", "astro"],
+  "cssvar.extensions": ["css", "postcss", "vue"],
 
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": true,

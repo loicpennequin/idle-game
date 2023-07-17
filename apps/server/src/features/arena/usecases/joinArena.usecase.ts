@@ -1,4 +1,4 @@
-import { UUID } from '@daria/shared';
+import { UUID, randomInt } from '@daria/shared';
 import { subject } from '@casl/ability';
 import {
   ForbiddenError,
@@ -7,7 +7,7 @@ import {
   errorFactory
 } from '../../../utils/errorFactory';
 import { UseCase } from '../../../utils/helpers';
-import { Arena } from '../arena.entity';
+import { Arena } from '../entities/arena.entity';
 import { ArenaRepository } from '../arena.repository';
 import { isLeft, left } from 'fp-ts/Either';
 import { User } from '../../user/user.entity';
@@ -60,5 +60,9 @@ export const joinArenaUseCase =
       return left(errorFactory.forbidden());
     }
 
-    return arenaRepo.join({ arenaId, heroId });
+    const position = {
+      x: randomInt(arena.right.size),
+      y: randomInt(arena.right.size)
+    };
+    return arenaRepo.join({ arenaId, heroId, position });
   };

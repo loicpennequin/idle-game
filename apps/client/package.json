@@ -32,6 +32,8 @@
     "nanoid": "^4.0.2",
     "ofetch": "^1.1.0",
     "pinia": "^2.0.36",
+    "postcss-html": "^1.5.0",
+    "postcss-syntax": "^0.36.2",
     "unplugin-auto-import": "^0.16.4",
     "unplugin-vue-components": "^0.25.1",
     "unplugin-vue-router": "^0.6.4",

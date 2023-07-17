@@ -5,8 +5,6 @@ export const HeroResponse = z.object({
   id: z.string().cuid(),
   name: z.string(),
   owner: UserResponse,
-  level: z.number(),
-  arenaId: z.string().cuid().nullable(),
-  joinedArenaAt: z.coerce.date().nullable()
+  level: z.number()
 });
 export type HeroResponse = z.infer<typeof HeroResponse>;

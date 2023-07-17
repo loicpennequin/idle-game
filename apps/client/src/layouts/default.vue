@@ -29,7 +29,7 @@ const { mutate: logout, isLoading } = useLogout();
   display: grid;
   grid-template-rows: auto 1fr;
   min-height: 100vh;
-  min-height: 100svh;
+  min-height: 100dvh;
 }
 header {
   display: flex;

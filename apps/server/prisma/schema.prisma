@@ -27,26 +27,36 @@ model RefreshToken {
 }
 
 model Hero {
-  id            String    @id @unique @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  id            String     @id @unique @default(cuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime?  @updatedAt
   name          String
   level         Int
   ownerId       String
-  owner         User      @relation(fields: [ownerId], references: [id])
-  arenaId       String?
-  arena         Arena?    @relation(fields: [arenaId], references: [id])
+  owner         User       @relation(fields: [ownerId], references: [id])
   joinedArenaAt DateTime?
+  ArenaHero     ArenaHero?
 }
 
 model Arena {
-  id        String    @id @unique @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  name      String    @unique
+  id        String      @id @unique @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?   @updatedAt
+  name      String      @unique
   maxSlots  Int
   size      Int
   minLevel  Int
-  heroes    Hero[]
   maxLevel  Int
+  heroes    ArenaHero[]
+}
+
+model ArenaHero {
+  id        String    @id @unique @default(cuid())
+  joinedAt  DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  stats     Json
+  heroId    String    @unique
+  hero      Hero      @relation(fields: [heroId], references: [id])
+  arenaId   String
+  arena     Arena     @relation(fields: [arenaId], references: [id])
 }

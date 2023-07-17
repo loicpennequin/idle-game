@@ -1,30 +1,65 @@
 import { PrismaClient } from '@prisma/client';
 import * as E from 'fp-ts/Either';
+import * as A from 'fp-ts/Array';
+import { pipe } from 'fp-ts/function';
 import { NotFoundError, UnexpectedError, errorFactory } from '../../utils/errorFactory';
-import { Arena } from './arena.entity';
+import { Arena, ArenaDetails } from './entities/arena.entity';
 import { handlePrismaError, prismaNotFoundMatchers } from '../../utils/prisma';
-import { UUID } from '@daria/shared';
+import { Point, UUID } from '@daria/shared';
+import { ArenaMapper } from './arena.mapper';
 
 export type ArenaRepository = {
   findAll(): Promise<E.Either<UnexpectedError, Arena[]>>;
   findById(id: UUID): Promise<E.Either<UnexpectedError | NotFoundError, Arena>>;
-  join(arg: { arenaId: UUID; heroId: UUID }): Promise<E.Either<UnexpectedError, Arena>>;
+  findByIdWithDetails(id: UUID): Promise<E.Either<UnexpectedError, ArenaDetails>>;
+  join(arg: {
+    arenaId: UUID;
+    heroId: UUID;
+    position: Point;
+  }): Promise<E.Either<UnexpectedError, Arena>>;
   leave(arg: { arenaId: UUID; heroId: UUID }): Promise<E.Either<UnexpectedError, Arena>>;
 };
 
 export const arenaRepository = ({
-  prisma
+  prisma,
+  arenaMapper
 }: {
   prisma: PrismaClient;
+  arenaMapper: ArenaMapper;
 }): ArenaRepository => {
   return {
     async findAll() {
       try {
         const arenas = await prisma.arena.findMany({
-          include: { heroes: { include: { owner: true } } }
+          include: { heroes: true }
         });
 
-        return E.right(arenas);
+        return pipe(
+          arenas,
+          A.map(arena => arenaMapper.toDomain(arena)),
+          A.sequence(E.Applicative)
+        );
+      } catch (err) {
+        return E.left(handlePrismaError()(err));
+      }
+    },
+
+    async findByIdWithDetails(id) {
+      try {
+        const arena = await prisma.arena.findUniqueOrThrow({
+          where: { id },
+          include: {
+            heroes: {
+              include: {
+                hero: {
+                  include: { owner: true }
+                }
+              }
+            }
+          }
+        });
+
+        return arenaMapper.toDetailsAggregate(arena);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }
@@ -32,33 +67,30 @@ export const arenaRepository = ({
 
     async findById(id) {
       try {
-        const hero = await prisma.arena.findUniqueOrThrow({
+        const arena = await prisma.arena.findUniqueOrThrow({
           where: { id },
-          include: { heroes: { include: { owner: true } } }
+          include: { heroes: true }
         });
 
-        return E.right(hero);
+        return arenaMapper.toDomain(arena);
       } catch (err) {
         return E.left(handlePrismaError(prismaNotFoundMatchers)(err));
       }
     },
 
-    async join({ arenaId, heroId }) {
+    async join({ arenaId, heroId, position }) {
       try {
         const arena = await prisma.arena.update({
           where: { id: arenaId },
-          include: { heroes: { include: { owner: true } } },
+          include: { heroes: true },
           data: {
             heroes: {
-              connect: { id: heroId },
-              set: {
-                id: heroId,
-                joinedArenaAt: new Date()
-              }
+              create: { heroId: heroId, stats: { position } }
             }
           }
         });
-        return E.right(arena);
+
+        return arenaMapper.toDomain(arena);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }
@@ -68,20 +100,17 @@ export const arenaRepository = ({
       try {
         const arena = await prisma.arena.update({
           where: { id: arenaId },
-          include: { heroes: { include: { owner: true } } },
+          include: { heroes: true },
           data: {
             heroes: {
               delete: {
-                id: heroId
-              },
-              set: {
-                id: heroId,
-                joinedArenaAt: null
+                heroId
               }
             }
           }
         });
-        return E.right(arena);
+
+        return arenaMapper.toDomain(arena);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }

@@ -1,5 +1,4 @@
 import type { AnyFunction, Gradual, Slice } from '../types/utils';
-import * as E from 'fp-ts/Either';
 
 export const clamp = (num: number, min: number, max: number) =>
   Math.min(Math.max(num, min), max);
@@ -35,3 +34,7 @@ export function curry<
 }
 
 export const noop = () => {};
+
+export const random = (max: number) => Math.random() * max;
+
+export const randomInt = (max: number) => Math.round(random(max));

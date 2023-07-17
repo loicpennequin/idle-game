@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { ErrorResponse } from '../core';
-import { ArenaResponse } from './arena.schemas';
+import { ArenaDetailsResponse, ArenaResponse } from './arena.schemas';
 import { z } from 'zod';
 
 const c = initContract();
@@ -20,7 +20,7 @@ export const arenaContract = c.router(
       method: 'GET',
       path: '/:arenaId',
       responses: {
-        200: ArenaResponse,
+        200: ArenaDetailsResponse,
         404: ErrorResponse,
         500: ErrorResponse
       },

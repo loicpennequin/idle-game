@@ -6,7 +6,7 @@ import {
   errorFactory
 } from '../../../utils/errorFactory';
 import { UseCase } from '../../../utils/helpers';
-import { Arena } from '../arena.entity';
+import { Arena } from '../entities/arena.entity';
 import { ArenaRepository } from '../arena.repository';
 import { isLeft, left } from 'fp-ts/Either';
 import { HeroAbilityBuilder } from '../../hero/hero.ability';

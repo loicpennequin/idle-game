@@ -24,7 +24,7 @@ export class AppError extends Error {
     public statusCode: HttpStatusCode & ErrorHttpStatusCode,
     public kind: ErrorKind,
     public meta: Nullable<AnyObject>,
-    public cause?: Error
+    public cause?: unknown
   ) {
     super(message);
   }

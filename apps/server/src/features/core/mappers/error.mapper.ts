@@ -1,5 +1,6 @@
 import { ErrorResponse } from '@daria/shared';
 import { AppError } from '../../../utils/errorFactory';
+import { isObject, isString } from 'lodash';
 
 export type ErrorMapper = {
   toResponse<T extends AppError>(err: T): ErrorResponse;
@@ -10,7 +11,10 @@ export const errorMapper = (): ErrorMapper => {
       return {
         kind: err.kind,
         message: err.message,
-        cause: err.cause?.message
+        cause:
+          isObject(err.cause) && 'message' in err.cause && isString(err.cause.message)
+            ? err.cause.message
+            : undefined
       };
     }
   };
