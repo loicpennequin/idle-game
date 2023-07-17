@@ -37,7 +37,7 @@ const onSubmit = form.handleSubmit(values => signup(values));
     </UiFormControl>
 
     <UiFormControl v-slot="{ error, inputProps }" name="password">
-      <UiFormLabel for="password">password</UiFormLabel>
+      <UiFormLabel for="password">Password</UiFormLabel>
       <UiPasswordInput id="password" v-bind="inputProps" left-icon="mdi:lock-outline" />
       <UiFormError :error="error" />
     </UiFormControl>
@@ -56,5 +56,3 @@ const onSubmit = form.handleSubmit(values => signup(values));
     <UiFormError :error="error?.message" />
   </form>
 </template>
-
-<style scoped lang="postcss"></style>

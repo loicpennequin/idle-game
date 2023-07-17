@@ -25,6 +25,12 @@ const { mutate: logout, isLoading } = useLogout();
 </template>
 
 <style scoped lang="postcss">
+.default-layout {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  min-height: 100svh;
+}
 header {
   display: flex;
   gap: var(--size-5);

@@ -10,10 +10,10 @@ definePage({
   <main class="container">
     <section class="hero">
       <div class="surface">
-        <p>Thousands of players are already battling each other</p>
+        <p>Join thousands of players in the arena</p>
 
         <UiButton :to="{ name: 'Register' }" style="--button-size: var(--font-size-4)">
-          Join them
+          Play for free
         </UiButton>
       </div>
     </section>
@@ -25,12 +25,13 @@ definePage({
 </template>
 
 <style scoped lang="postcss">
+@import 'open-props/medias';
 main {
   --container-size: var(--size-xl);
 }
 
 .hero {
-  @screen md {
+  @media (--m-n-above) {
     display: grid;
     grid-template-columns: 1fr 2fr;
   }
