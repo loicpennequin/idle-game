@@ -121,6 +121,7 @@ declare global {
   const useAnimate: typeof import('@vueuse/core')['useAnimate']
   const useApi: typeof import('./src/features/core/composables/useApi')['useApi']
   const useApiQuery: typeof import('./src/features/core/composables/useApiQuery')['useApiQuery']
+  const useArenaDetails: typeof import('./src/features/arena/composables/queries')['useArenaDetails']
   const useArenas: typeof import('./src/features/arena/composables/queries')['useArenas']
   const useArrayDifference: typeof import('@vueuse/core')['useArrayDifference']
   const useArrayEvery: typeof import('@vueuse/core')['useArrayEvery']
