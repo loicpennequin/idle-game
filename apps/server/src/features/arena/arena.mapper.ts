@@ -7,7 +7,9 @@ import {
   User as PrismaUser
 } from '@prisma/client';
 import { z } from 'zod';
-import { Either, left, right } from 'fp-ts/Either';
+import { Either, left, right, isLeft, Applicative } from 'fp-ts/Either';
+import { sequence, map } from 'fp-ts/Array';
+import { pipe } from 'fp-ts/function';
 import { HeroMapper } from '../hero/hero.mapper';
 import { UnexpectedError, errorFactory } from '../../utils/errorFactory';
 
@@ -54,13 +56,7 @@ export const arenaMapper = ({ heroMapper }: { heroMapper: HeroMapper }): ArenaMa
 
     toDetailsResponse(arena) {
       return {
-        id: arena.id,
-        name: arena.name,
-        maxSlots: arena.maxSlots,
-        availableSlots: arena.maxSlots - arena.heroes.length,
-        size: arena.size,
-        minLevel: arena.minLevel,
-        maxLevel: arena.maxLevel,
+        ...toResponse(arena),
         heroes: arena.heroes.map(arenaHero => ({
           hero: heroMapper.toResponse(arenaHero.hero),
           id: arenaHero.id,
@@ -97,27 +93,39 @@ export const arenaMapper = ({ heroMapper }: { heroMapper: HeroMapper }): ArenaMa
 
     toDetailsAggregate(arena) {
       try {
-        return right({
-          id: arena.id,
-          name: arena.name,
-          maxSlots: arena.maxSlots,
-          size: arena.size,
-          minLevel: arena.minLevel,
-          maxLevel: arena.maxLevel,
-          heroes: arena.heroes.map(arenaHero => ({
-            id: arenaHero.id,
-            joinedAt: arenaHero.joinedAt,
-            arenaId: arenaHero.arenaId,
-            heroId: arenaHero.heroId,
-            stats: heroStatSchema.parse(arenaHero.stats),
-            hero: {
-              id: arenaHero.hero.id,
-              level: arenaHero.hero.level,
-              name: arenaHero.hero.name,
-              owner: arenaHero.hero.owner
-            }
-          }))
-        });
+        return pipe(
+          arena,
+          arena => ({
+            id: arena.id,
+            name: arena.name,
+            maxSlots: arena.maxSlots,
+            size: arena.size,
+            minLevel: arena.minLevel,
+            maxLevel: arena.maxLevel,
+            heroes: pipe(
+              arena.heroes,
+              map(arenaHero => ({
+                id: arenaHero.id,
+                joinedAt: arenaHero.joinedAt,
+                arenaId: arenaHero.arenaId,
+                heroId: arenaHero.heroId,
+                stats: heroStatSchema.parse(arenaHero.stats),
+                hero: heroMapper.toDomain(arenaHero.hero)
+              })),
+              arenaHeroes =>
+                arenaHeroes.map(arenaHero =>
+                  isLeft(arenaHero.hero)
+                    ? left(arenaHero.hero.left)
+                    : right({ ...arenaHero, hero: arenaHero.hero.right })
+                ),
+              sequence(Applicative)
+            )
+          }),
+          arena =>
+            isLeft(arena.heroes)
+              ? left(errorFactory.unexpected())
+              : right({ ...arena, heroes: arena.heroes.right })
+        );
       } catch (err) {
         return left(
           errorFactory.unexpected({ cause: err instanceof Error ? err : undefined })
