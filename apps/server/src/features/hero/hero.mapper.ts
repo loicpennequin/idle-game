@@ -1,12 +1,13 @@
 import { HeroResponse } from '@daria/shared';
 import { Hero } from './hero.entity';
 import { Hero as PrismaHero, User as PrismaUser } from '@prisma/client';
-import { Option, some, none } from 'fp-ts/Option';
+import { Either, left, right } from 'fp-ts/Either';
+import { UnexpectedError, errorFactory } from '../../utils/errorFactory';
 
 export type HeroMapper = {
   toResponse(hero: Hero): HeroResponse;
   toResponseArray(heros: Hero[]): HeroResponse[];
-  toDomain(hero: PrismaHero & { owner: PrismaUser }): Option<Hero>;
+  toDomain(hero: PrismaHero & { owner: PrismaUser }): Either<UnexpectedError, Hero>;
 };
 
 export const heroMapper = (): HeroMapper => {
@@ -27,14 +28,14 @@ export const heroMapper = (): HeroMapper => {
 
     toDomain(hero) {
       try {
-        return some({
+        return right({
           id: hero.id,
           name: hero.name,
           owner: hero.owner,
           level: hero.level
         });
       } catch {
-        return none;
+        return left(errorFactory.unexpected());
       }
     }
   };

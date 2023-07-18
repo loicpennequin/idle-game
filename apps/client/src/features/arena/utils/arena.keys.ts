@@ -3,7 +3,7 @@ import { createQueryKeys, type inferQueryKeys } from '@lukemorales/query-key-fac
 
 export const arenaKeys = createQueryKeys('arena', {
   list: null,
-  details: (arenaId: Ref<UUID>) => ({
+  detail: (arenaId: Ref<UUID>) => ({
     queryKey: [arenaId]
   })
 });

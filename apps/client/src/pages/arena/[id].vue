@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { useArenaDetails } from '@/features/arena/composables/queries';
-
-const props = defineProps<{}>();
-const emit = defineEmits<{}>();
+import { definePage } from 'vue-router/auto';
 
 definePage({
   name: 'Arena'
 });
 
 const route = useRoute('Arena');
-
-const { data: arena } = useArenaDetails(computed(() => route.params.id));
+const { isLoading, data: arena } = useArenaDetails(computed(() => route.params.id));
 </script>
 
 <template>
   <main class="container surface" style="--container-size: var(--size-xl)">
-    <pre>{{ arena }}</pre>
+    <div v-if="isLoading">Loading arena...</div>
+    <pre v-if="arena">{{ arena }}</pre>
   </main>
 </template>
 

@@ -36,7 +36,7 @@ li {
       box-shadow: var(--shadow-3);
 
       @media (--motionOK) {
-        scale: 1.05;
+        scale: 1.02;
       }
     }
   }

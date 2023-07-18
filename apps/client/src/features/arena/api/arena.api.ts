@@ -1,19 +1,19 @@
-import type { UUID, ArenaContract } from '@daria/shared';
+import { type ArenaContract, type UUID } from '@daria/shared';
 import { apiHandler } from '@/utils/api-helpers';
 import type { ApiClient } from '@/features/core/apiClient';
 import type { ClientInferResponseBody } from '@ts-rest/core';
 
+export type JoinArenaResponse = ClientInferResponseBody<ArenaContract['join'], 200>;
+export type LeaveArenaResponse = ClientInferResponseBody<ArenaContract['leave'], 200>;
 export type GetAllArenasResponse = ClientInferResponseBody<ArenaContract['getAll'], 200>;
 export type GetArenaDetailsResponse = ClientInferResponseBody<
   ArenaContract['getById'],
   200
 >;
-export type JoinArenaResponse = ClientInferResponseBody<ArenaContract['join']>;
-export type LeaveArenaResponse = ClientInferResponseBody<ArenaContract['leave']>;
 
 export type ArenaApi = {
   getAll: () => Promise<GetAllArenasResponse>;
-  getDetails: (arenaId: UUID) => Promise<GetArenaDetailsResponse>;
+  getDetails: (id: UUID) => Promise<GetArenaDetailsResponse>;
   join: (arg: { arenaId: string; heroId: string }) => Promise<JoinArenaResponse>;
   leave: (arg: { arenaId: string; heroId: string }) => Promise<LeaveArenaResponse>;
 };
