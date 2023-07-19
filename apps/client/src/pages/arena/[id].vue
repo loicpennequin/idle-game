@@ -43,6 +43,10 @@ await Promise.all([arenaSuspense(), heroesSuspense()]);
         <dd>{{ arena.name }}</dd>
         <dt>Slots</dt>
         <dd>{{ arena.availableSlots }}/{{ arena.maxSlots }}</dd>
+        <dt>Min level</dt>
+        <dd>{{ arena.minLevel }}</dd>
+        <dt>Max level</dt>
+        <dd>{{ arena.maxLevel }}</dd>
         <dt>Heroes</dt>
         <dd>
           <ul class="flex gap-3">

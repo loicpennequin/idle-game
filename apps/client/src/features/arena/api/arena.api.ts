@@ -2,6 +2,8 @@ import { type ArenaContract, type UUID } from '@daria/shared';
 import { apiHandler } from '@/utils/api-helpers';
 import type { ApiClient } from '@/features/core/apiClient';
 import type { ClientInferResponseBody } from '@ts-rest/core';
+import type { QueryClient } from '@tanstack/vue-query';
+import { queryKeys } from '@/features/core/queryKeys';
 
 export type JoinArenaResponse = ClientInferResponseBody<ArenaContract['join'], 200>;
 export type LeaveArenaResponse = ClientInferResponseBody<ArenaContract['leave'], 200>;
@@ -20,14 +22,31 @@ export type ArenaApi = {
 
 type Dependencies = {
   apiClient: ApiClient;
+  queryClient: QueryClient;
 };
-export const arenaApi = ({ apiClient }: Dependencies): ArenaApi => {
+export const arenaApi = ({ queryClient, apiClient }: Dependencies): ArenaApi => {
   return {
     getAll: () => apiHandler(apiClient.arena.getAll),
     getDetails: arenaId => apiHandler(apiClient.arena.getById, { params: { arenaId } }),
-    join: ({ arenaId, heroId }) =>
-      apiHandler(apiClient.arena.join, { params: { arenaId }, body: { heroId } }),
-    leave: ({ arenaId, heroId }) =>
-      apiHandler(apiClient.arena.leave, { params: { arenaId }, body: { heroId } })
+    join: async ({ arenaId, heroId }) => {
+      const result = await apiHandler(apiClient.arena.join, {
+        params: { arenaId },
+        body: { heroId }
+      });
+
+      queryClient.invalidateQueries(queryKeys.arena.detail._def);
+
+      return result;
+    },
+    leave: async ({ arenaId, heroId }) => {
+      const result = await apiHandler(apiClient.arena.leave, {
+        params: { arenaId },
+        body: { heroId }
+      });
+
+      queryClient.invalidateQueries(queryKeys.arena.detail._def);
+
+      return result;
+    }
   };
 };
