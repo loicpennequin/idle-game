@@ -2,11 +2,11 @@ import { PrismaClient } from '@prisma/client';
 import * as E from 'fp-ts/Either';
 import * as A from 'fp-ts/Array';
 import { pipe } from 'fp-ts/function';
-import { NotFoundError, UnexpectedError, errorFactory } from '../../utils/errorFactory';
+import { NotFoundError, UnexpectedError } from '../../utils/errorFactory';
 import { Arena, ArenaDetails } from './entities/arena.entity';
 import { handlePrismaError, prismaNotFoundMatchers } from '../../utils/prisma';
 import { Point, UUID } from '@daria/shared';
-import { ArenaMapper } from './arena.mapper';
+import { ArenaMapper } from './mappers/arena.mapper';
 
 export type ArenaRepository = {
   findAll(): Promise<E.Either<UnexpectedError, Arena[]>>;
