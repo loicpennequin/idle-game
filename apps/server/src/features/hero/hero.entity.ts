@@ -1,6 +1,5 @@
 import { UUID } from '@daria/shared';
 import { User } from '../user/user.entity';
-import { ArenaId } from '../arena/entities/arena.entity';
 
 export type HeroId = UUID;
 

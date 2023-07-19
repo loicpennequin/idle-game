@@ -14,7 +14,7 @@
   },
   "stylelint.validate": ["css", "scss", "vue", "html"],
 
-  "css.validate": false,
+  "css.validate": true,
   "scss.validate": false,
 
   "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"]

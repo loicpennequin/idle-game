@@ -49,7 +49,7 @@ export const leaveArenaUseCase =
     if (isLeft(hero)) return hero;
 
     const userAbility = userAbilityBuilder.buildFor(session);
-    if (userAbility.can('edit', subject('Hero', hero.right))) {
+    if (userAbility.cannot('edit', subject('Hero', hero.right))) {
       return left(errorFactory.forbidden());
     }
 
@@ -59,7 +59,7 @@ export const leaveArenaUseCase =
     }
 
     const heroAbility = heroAbilityBuilder.buildFor(hero.right);
-    if (heroAbility.can('leave', subject('Arena', arena.right))) {
+    if (heroAbility.cannot('leave', subject('Arena', arena.right))) {
       return left(errorFactory.forbidden());
     }
 

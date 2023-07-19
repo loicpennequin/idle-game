@@ -36,12 +36,13 @@ export const arenaRouter = s.router(contract.arena, {
     );
   },
 
-  leave({ req: { container } }) {
-    return Promise.resolve({
-      status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-      body: container.errorMapper.toResponse(
-        errorFactory.unexpected({ message: 'Not implemented' })
-      )
-    });
+  async leave({ params, body, req: { container } }) {
+    return pipe(
+      await container.leaveArenaUseCase({
+        arenaId: params.arenaId,
+        heroId: body.heroId
+      }),
+      container.responseMapper(HTTP_STATUS_CODES.OK, container.arenaMapper.toResponse)
+    );
   }
 });

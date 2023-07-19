@@ -1,5 +1,5 @@
 import type { UseApiMutationOptions } from '@/features/core/composables/useApiQuery';
-import type { Contract } from '@daria/shared';
+import { contract, type Contract } from '@daria/shared';
 import type { UserApi } from '../api/user.api';
 
 export const useSignup = (
@@ -7,10 +7,7 @@ export const useSignup = (
 ) => {
   const { userApi } = useContainer();
 
-  return createUseApiMutation<Contract['user']['signup']>()({
-    ...options,
-    mutationFn: userApi.signup
-  });
+  return createUseApiMutation(contract.user.signup, userApi.signup)(options);
 };
 
 export const useUpdateProfile = (
@@ -21,8 +18,8 @@ export const useUpdateProfile = (
 ) => {
   const { userApi } = useContainer();
 
-  return createUseApiMutation<Contract['user']['updateProfile']>()({
-    ...options,
-    mutationFn: userApi.updateProfile
-  });
+  return createUseApiMutation(
+    contract.user.updateProfile,
+    userApi.updateProfile
+  )(options);
 };

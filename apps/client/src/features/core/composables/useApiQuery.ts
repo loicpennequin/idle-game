@@ -9,7 +9,11 @@ import type {
   UseQueryOptions,
   UseQueryReturnType
 } from '@tanstack/vue-query';
-import type { AppRoute } from '@ts-rest/core';
+import type {
+  AppRoute,
+  ClientInferResponseBody,
+  SuccessfulHttpStatusCode
+} from '@ts-rest/core';
 
 export type UseApiQueryOptions<
   TAppRoute extends AppRoute,
@@ -68,14 +72,20 @@ export type UseApiMutationOptions<
 >;
 
 export const createUseApiMutation =
-  <TAppRoute extends AppRoute>() =>
-  <TFunction extends UseMutationFn<AppRoute>>(
-    options: RequiredBy<UseApiMutationOptions<TAppRoute, TFunction>, 'mutationFn'>
+  <
+    TAppRoute extends AppRoute,
+    TFunction extends (arg: any) => Promise<DataResponse<TAppRoute>['body']>
+  >(
+    route: TAppRoute,
+    fn: TFunction
+  ) =>
+  (
+    options: Omit<UseApiMutationOptions<TAppRoute, TFunction>, 'mutationFn'> = {}
   ): UseMutationReturnType<
     DataResponse<TAppRoute>['body'],
     ErrorResponse<TAppRoute>['body'],
     Parameters<TFunction>[0],
     unknown
   > => {
-    return useMutation(options);
+    return useMutation({ ...options, mutationFn: fn });
   };

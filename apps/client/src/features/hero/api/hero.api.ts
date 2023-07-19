@@ -1,9 +1,13 @@
-import { type HeroResponse } from '@daria/shared';
+import type { UUID, UserContract, HeroContract } from '@daria/shared';
 import { apiHandler } from '@/utils/api-helpers';
 import type { ApiClient } from '@/features/core/apiClient';
+import type { ClientInferResponseBody } from '@ts-rest/core';
 
 export type HeroApi = {
-  getAll: () => Promise<HeroResponse[]>;
+  getAll: () => Promise<ClientInferResponseBody<HeroContract['getAll'], 200>>;
+  getByOwnerId: (
+    ownerId: UUID
+  ) => Promise<ClientInferResponseBody<UserContract['userHeroes'], 200>>;
 };
 
 type Dependencies = {
@@ -11,6 +15,11 @@ type Dependencies = {
 };
 export const heroApi = ({ apiClient }: Dependencies): HeroApi => {
   return {
-    getAll: () => apiHandler(apiClient.hero.getAll)
+    getAll() {
+      return apiHandler(apiClient.hero.getAll);
+    },
+    getByOwnerId(userId) {
+      return apiHandler(apiClient.user.userHeroes, { params: { userId } });
+    }
   };
 };

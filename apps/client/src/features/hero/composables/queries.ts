@@ -3,7 +3,7 @@ import type {
   UseApiQueryOptions
 } from '@/features/core/composables/useApiQuery';
 import { queryKeys, type QueryKeys } from '@/features/core/queryKeys';
-import type { Contract } from '@daria/shared';
+import type { Contract, Nullable, UUID } from '@daria/shared';
 
 export const useHeros = (
   options: UseApiQueryOptions<
@@ -17,5 +17,22 @@ export const useHeros = (
     ...options,
     ...queryKeys.hero.list,
     queryFn: heroApi.getAll
+  });
+};
+
+export const useUserHeroes = (
+  userId: Ref<Nullable<UUID>>,
+  options: UseApiQueryOptions<
+    Contract['user']['userHeroes'],
+    QueryKeys['hero']['byUser']['queryKey']
+  > = {}
+) => {
+  const { heroApi } = useContainer();
+
+  return createUseApiQuery<Contract['user']['userHeroes']>()({
+    ...options,
+    ...queryKeys.hero.byUser(userId),
+    queryFn: () => heroApi.getByOwnerId(userId.value!),
+    enabled: computed(() => isDefined(userId.value))
   });
 };

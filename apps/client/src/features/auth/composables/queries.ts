@@ -2,7 +2,7 @@ import type {
   UseApiMutationOptions,
   UseApiQueryOptions
 } from '@/features/core/composables/useApiQuery';
-import type { Contract, Nullable } from '@daria/shared';
+import { contract, type Contract, type Nullable } from '@daria/shared';
 import type { AuthApi, LoginResponse } from '../api/auth.api';
 import { queryKeys, type QueryKeys } from '@/features/core/queryKeys';
 
@@ -11,10 +11,7 @@ export const useLogin = (
 ) => {
   const { authApi } = useContainer();
 
-  return createUseApiMutation<Contract['auth']['login']>()({
-    ...options,
-    mutationFn: authApi.login
-  });
+  return createUseApiMutation(contract.auth.login, authApi.login)(options);
 };
 
 export const useLogout = (
@@ -22,10 +19,7 @@ export const useLogout = (
 ) => {
   const { authApi } = useContainer();
 
-  return createUseApiMutation<Contract['auth']['logout']>()({
-    ...options,
-    mutationFn: authApi.logout
-  });
+  return createUseApiMutation(contract.auth.logout, authApi.logout)(options);
 };
 
 export const useIsAuthenticated = () => {

@@ -19,7 +19,7 @@ export const heroAbilityBuilder = (): HeroAbilityBuilder => {
         });
 
         can('join', 'Arena', (subject: Arena) => {
-          return hero.arenaId !== subject.id;
+          return !subject.heroes.some(h => h.heroId === hero.id);
         });
 
         can('join', 'Arena', (subject: Arena) => {
@@ -27,7 +27,7 @@ export const heroAbilityBuilder = (): HeroAbilityBuilder => {
         });
 
         can('leave', 'Arena', (subject: Arena) => {
-          return hero.arenaId === subject.id;
+          return subject.heroes.some(h => h.heroId === hero.id);
         });
       });
     }

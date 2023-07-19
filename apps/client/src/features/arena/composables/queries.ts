@@ -1,6 +1,7 @@
 import type { UseApiQueryOptions } from '@/features/core/composables/useApiQuery';
 import { queryKeys, type QueryKeys } from '@/features/core/queryKeys';
-import type { Contract, UUID } from '@daria/shared';
+import { contract, type Contract, type UUID } from '@daria/shared';
+import type { ArenaApi } from '../api/arena.api';
 
 export const useArenas = (
   options: UseApiQueryOptions<
@@ -16,6 +17,7 @@ export const useArenas = (
     queryFn: arenaApi.getAll
   });
 };
+
 export const useArenaDetails = (
   arenaId: Ref<UUID>,
   options: UseApiQueryOptions<
@@ -30,4 +32,16 @@ export const useArenaDetails = (
     ...queryKeys.arena.detail(arenaId),
     queryFn: () => arenaApi.getDetails(arenaId.value)
   });
+};
+
+export const useJoinArena = () => {
+  const { arenaApi } = useContainer();
+
+  return createUseApiMutation(contract.arena.join, arenaApi.join)();
+};
+
+export const useLeaveArena = () => {
+  const { arenaApi } = useContainer();
+
+  return createUseApiMutation(contract.arena.leave, arenaApi.leave)();
 };

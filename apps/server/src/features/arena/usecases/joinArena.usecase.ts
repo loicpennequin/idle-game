@@ -48,7 +48,7 @@ export const joinArenaUseCase =
     if (isLeft(hero)) return hero;
 
     const userAbility = userAbilityBuilder.buildFor(session);
-    if (userAbility.can('edit', subject('Hero', hero.right))) {
+    if (userAbility.cannot('edit', subject('Hero', hero.right))) {
       return left(errorFactory.forbidden());
     }
 
@@ -56,7 +56,7 @@ export const joinArenaUseCase =
     if (isLeft(arena)) return arena;
 
     const heroAbility = heroAbilityBuilder.buildFor(hero.right);
-    if (heroAbility.can('join', subject('Arena', arena.right))) {
+    if (heroAbility.cannot('join', subject('Arena', arena.right))) {
       return left(errorFactory.forbidden());
     }
 
