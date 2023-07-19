@@ -34,7 +34,7 @@ export const arenaApi = ({ queryClient, apiClient }: Dependencies): ArenaApi => 
         body: { heroId }
       });
 
-      queryClient.invalidateQueries(queryKeys.arena.detail._def);
+      queryClient.invalidateQueries(queryKeys.arena.detail(ref(arenaId)).queryKey);
 
       return result;
     },
@@ -44,7 +44,7 @@ export const arenaApi = ({ queryClient, apiClient }: Dependencies): ArenaApi => 
         body: { heroId }
       });
 
-      queryClient.invalidateQueries(queryKeys.arena.detail._def);
+      queryClient.invalidateQueries(queryKeys.arena.detail(ref(arenaId)).queryKey);
 
       return result;
     }
