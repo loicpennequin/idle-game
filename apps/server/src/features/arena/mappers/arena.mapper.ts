@@ -8,6 +8,7 @@ import {
 } from '@prisma/client';
 import { z } from 'zod';
 import * as E from 'fp-ts/Either';
+import * as A from 'fp-ts/Array';
 import { flow, pipe } from 'fp-ts/function';
 import { UnexpectedError, errorFactory } from '../../../utils/errorFactory';
 import { ArenaHeroMapper } from './arenaHero.mapper';
@@ -70,25 +71,24 @@ export const arenaMapper = ({ arenaHeroMapper }: Dependencies): ArenaMapper => {
       };
     },
 
-    toDomain: E.tryCatchK(
-      arena => ({
-        ...toDomainBase(arena),
-        heroes: arena.heroes.map(arenaHero => ({
-          id: arenaHero.id,
-          joinedAt: arenaHero.joinedAt,
-          arenaId: arenaHero.arenaId,
-          heroId: arenaHero.heroId,
-          stats: heroStatSchema.parse(arenaHero.stats)
+    toDomain(arena) {
+      return pipe(
+        arena.heroes,
+        A.map(arenaHeroMapper.toDomain),
+        A.sequence(E.Applicative),
+        E.map(heroes => ({
+          ...toDomainBase(arena),
+          heroes
         }))
-      }),
-      err => errorFactory.unexpected({ cause: new Error(String(err)) })
-    ),
+      );
+    },
 
     toDetailsAggregate(arena) {
       return pipe(
-        E.Do,
-        E.apS('heroes', pipe(arena.heroes, arenaHeroMapper.toDetailsAggregate)),
-        E.map(({ heroes }) => ({
+        arena.heroes,
+        A.map(arenaHeroMapper.toDetailsAggregate),
+        A.sequence(E.Applicative),
+        E.map(heroes => ({
           ...toDomainBase(arena),
           heroes
         }))

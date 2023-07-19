@@ -1,5 +1,6 @@
 import { ArenaHeroResponse } from '@daria/shared';
 import {
+  Prisma,
   ArenaHero as PrismaArenaHero,
   Hero as PrismaHero,
   User as PrismaUser
@@ -14,10 +15,10 @@ import { ArenaHero, ArenaHeroDetails } from '../entities/arenaHero.entity';
 
 export type ArenaHeroMapper = {
   toResponse(arena: ArenaHeroDetails): ArenaHeroResponse;
-  toDomain(arenaHeroes: PrismaArenaHero[]): E.Either<UnexpectedError, ArenaHero[]>;
+  toDomain(arenaHeroes: PrismaArenaHero): E.Either<UnexpectedError, ArenaHero>;
   toDetailsAggregate(
-    arenaHeroes: (PrismaArenaHero & { hero: PrismaHero & { owner: PrismaUser } })[]
-  ): E.Either<UnexpectedError, ArenaHeroDetails[]>;
+    arenaHeroes: PrismaArenaHero & { hero: PrismaHero & { owner: PrismaUser } }
+  ): E.Either<UnexpectedError, ArenaHeroDetails>;
 };
 
 const heroStatSchema = z.object({
@@ -32,15 +33,8 @@ export const arenaHeroMapper = ({
 }: {
   heroMapper: HeroMapper;
 }): ArenaHeroMapper => {
-  const toDomainBase = E.tryCatchK(
-    (arenaHero: PrismaArenaHero) => ({
-      id: arenaHero.id,
-      joinedAt: arenaHero.joinedAt,
-      arenaId: arenaHero.arenaId,
-      heroId: arenaHero.heroId,
-      stats: heroStatSchema.parse(arenaHero.stats)
-    }),
-
+  const getStats = E.tryCatchK(
+    (stats: Prisma.JsonValue) => heroStatSchema.parse(stats),
     err => errorFactory.unexpected({ cause: new Error(String(err)) })
   );
 
@@ -55,18 +49,34 @@ export const arenaHeroMapper = ({
       };
     },
 
-    toDomain: flow(A.map(toDomainBase), A.sequence(E.Applicative)),
+    toDomain(arenaHero) {
+      return pipe(
+        E.Do,
+        E.bind('stats', () => getStats(arenaHero.stats)),
+        E.map(({ stats }) => ({
+          id: arenaHero.id,
+          joinedAt: arenaHero.joinedAt,
+          arenaId: arenaHero.arenaId,
+          heroId: arenaHero.heroId,
+          stats
+        }))
+      );
+    },
 
-    toDetailsAggregate: flow(
-      A.map(arenaHero =>
-        pipe(
-          E.Do,
-          E.bind('base', () => toDomainBase(arenaHero)),
-          E.apS('hero', pipe(arenaHero.hero, heroMapper.toDomain)),
-          E.map(({ base, hero }) => ({ ...base, hero }))
-        )
-      ),
-      A.sequence(E.Applicative)
-    )
+    toDetailsAggregate(arenaHero) {
+      return pipe(
+        E.Do,
+        E.bind('stats', () => getStats(arenaHero.stats)),
+        E.bind('hero', () => heroMapper.toDomain(arenaHero.hero)),
+        E.map(({ stats, hero }) => ({
+          id: arenaHero.id,
+          joinedAt: arenaHero.joinedAt,
+          arenaId: arenaHero.arenaId,
+          heroId: arenaHero.heroId,
+          stats,
+          hero
+        }))
+      );
+    }
   };
 };
