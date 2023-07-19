@@ -59,19 +59,19 @@ export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserReposi
 
     async findById(id) {
       try {
-        const user = await prisma.user.findUnique({ where: { id } });
+        const user = await prisma.user.findUniqueOrThrow({ where: { id } });
 
-        return E.fromNullable(errorFactory.notFound)(user);
+        return E.right(user);
       } catch (err) {
-        return E.left(handlePrismaError()(err));
+        return E.left(handlePrismaError(prismaNotFoundMatchers)(err));
       }
     },
 
     async findByEmail(email) {
       try {
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUniqueOrThrow({ where: { email } });
 
-        return E.fromNullable(errorFactory.notFound)(user);
+        return E.right(user);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }
@@ -81,7 +81,7 @@ export const userRepository = ({ prisma }: { prisma: PrismaClient }): UserReposi
       try {
         const user = await prisma.refreshToken.findUnique({ where: { value } }).user();
 
-        return E.fromNullable(errorFactory.notFound)(user);
+        return E.fromNullable(errorFactory.notFound())(user);
       } catch (err) {
         return E.left(handlePrismaError()(err));
       }

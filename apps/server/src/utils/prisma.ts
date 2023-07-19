@@ -1,37 +1,40 @@
 import { Prisma } from '@prisma/client';
 import { PrismaError } from 'prisma-error-enum';
-import { errorFactory } from './errorFactory';
-import { isDefined } from '@daria/shared';
+import { ErrorFactory, UnexpectedError, errorFactory } from './errorFactory';
+import { Values } from '@daria/shared';
 import { matchSwitch } from '@babakness/exhaustive-type-checking';
 
 export const prismaNotFoundMatchers = {
-  [PrismaError.RecordsNotFound]: () => (err: any) => errorFactory.notFound(err),
-  [PrismaError.RelatedRecordNotFound]: () => (err: any) => errorFactory.notFound(err)
+  [PrismaError.RecordsNotFound]: errorFactory.notFound,
+  [PrismaError.RelatedRecordNotFound]: errorFactory.notFound
 };
 
 export const prismaNotUniqueMatchers = {
-  [PrismaError.UniqueConstraintViolation]: () => {
-    return errorFactory.badRequest;
-  }
+  [PrismaError.UniqueConstraintViolation]: errorFactory.badRequest
 };
 
-export const handlePrismaError = <
-  TValue extends () => (err: any) => any,
-  TKey extends string
->(
-  matchers?: Record<TKey, TValue>
-) => {
-  return (err: unknown) => {
+type HandlePrismaError = {
+  <TError extends Values<ErrorFactory>>(matchers: Record<string, TError>): (
+    err: unknown
+  ) => ReturnType<TError> | UnexpectedError;
+  (matchers?: undefined): (err: unknown) => UnexpectedError;
+};
+
+export const handlePrismaError: HandlePrismaError = (matchers: any) => {
+  return (err: any) => {
     if (!(err instanceof Prisma.PrismaClientKnownRequestError)) {
-      return errorFactory.unexpected({ cause: err instanceof Error ? err : undefined });
+      return errorFactory.unexpected({ cause: new Error(String(err)) });
     }
 
-    const match = matchSwitch<ReturnType<TValue>, string>(
-      err.code,
-      (matchers as any) ?? {}
-    );
-    if (!isDefined(match)) return errorFactory.unexpected();
+    try {
+      const factories = Object.fromEntries(
+        Object.entries(matchers).map(([k, v]) => [k, () => v])
+      );
+      const match = matchSwitch(err.code, factories as any);
 
-    return match({ cause: err });
+      return (match as any)({ cause: new Error(String(err)) });
+    } catch {
+      return errorFactory.unexpected({ cause: new Error(String(err)) });
+    }
   };
 };

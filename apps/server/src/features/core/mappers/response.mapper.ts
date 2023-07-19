@@ -22,10 +22,13 @@ export const responseMapper = ({
     pipe(
       response,
       E.matchW(
-        err => ({
-          status: err.statusCode,
-          body: errorMapper.toResponse(err)
-        }),
+        err => {
+          console.log(err);
+          return {
+            status: err.statusCode,
+            body: errorMapper.toResponse(err)
+          };
+        },
         result => ({
           status: statusCode,
           body: mapper(result)

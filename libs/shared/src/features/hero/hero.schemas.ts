@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { UserResponse } from '../user';
+import { UserResponse } from '../user/user.schemas';
 
 export const HeroResponse = z.object({
   id: z.string().cuid(),

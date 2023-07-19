@@ -46,7 +46,7 @@ export const createApp = ({
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
   createExpressEndpoints(contract, router, app, {
-    responseValidation: true,
+    // responseValidation: true,
     globalMiddleware: [
       requestScopeMiddleware,
       (req, res, next) => {

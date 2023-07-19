@@ -1,6 +1,6 @@
 import { contract } from '@daria/shared';
 import { initServer } from '@ts-rest/express';
-import { HTTP_STATUS_CODES, errorFactory } from '../../utils/errorFactory';
+import { HTTP_STATUS_CODES } from '../../utils/errorFactory';
 import { pipe } from 'fp-ts/function';
 
 const s = initServer();
@@ -17,6 +17,13 @@ export const userRouter = s.router(contract.user, {
     return pipe(
       await container.updateProfileUseCase({ userId: params.userId, profile: body }),
       container.responseMapper(HTTP_STATUS_CODES.OK, container.userMapper.toResponse)
+    );
+  },
+
+  async userHeroes({ params, req: { container } }) {
+    return pipe(
+      await container.getUserHeroesUseCase(params.userId),
+      container.responseMapper(HTTP_STATUS_CODES.OK, container.heroMapper.toResponseArray)
     );
   }
 });
