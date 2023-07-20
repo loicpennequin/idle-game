@@ -31,7 +31,8 @@ export const arenaRepository = ({
     async findAll() {
       try {
         const arenas = await prisma.arena.findMany({
-          include: { heroes: true }
+          include: { heroes: true },
+          orderBy: { minLevel: 'asc' }
         });
 
         return pipe(

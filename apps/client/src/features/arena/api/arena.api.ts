@@ -35,6 +35,7 @@ export const arenaApi = ({ queryClient, apiClient }: Dependencies): ArenaApi => 
       });
 
       queryClient.invalidateQueries(queryKeys.arena.detail(ref(arenaId)).queryKey);
+      queryClient.invalidateQueries(queryKeys.arena.list.queryKey);
 
       return result;
     },
@@ -45,6 +46,7 @@ export const arenaApi = ({ queryClient, apiClient }: Dependencies): ArenaApi => 
       });
 
       queryClient.invalidateQueries(queryKeys.arena.detail(ref(arenaId)).queryKey);
+      queryClient.invalidateQueries(queryKeys.arena.list.queryKey);
 
       return result;
     }
