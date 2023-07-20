@@ -4,6 +4,7 @@ import type { ApiClient } from '@/features/core/apiClient';
 import type { ClientInferResponseBody } from '@ts-rest/core';
 import type { QueryClient } from '@tanstack/vue-query';
 import { queryKeys } from '@/features/core/queryKeys';
+import type { AppSocket } from '@/features/core/socket';
 
 export type JoinArenaResponse = ClientInferResponseBody<ArenaContract['join'], 200>;
 export type LeaveArenaResponse = ClientInferResponseBody<ArenaContract['leave'], 200>;
@@ -23,8 +24,22 @@ export type ArenaApi = {
 type Dependencies = {
   apiClient: ApiClient;
   queryClient: QueryClient;
+  socket: AppSocket;
 };
-export const arenaApi = ({ queryClient, apiClient }: Dependencies): ArenaApi => {
+export const arenaApi = ({ queryClient, apiClient, socket }: Dependencies): ArenaApi => {
+  socket.on('HERO_JOINED_ARENA', arenaHero => {
+    const key = queryKeys.arena.detail(ref(arenaHero.arenaId)).queryKey;
+    const oldData = queryClient.getQueryData<GetArenaDetailsResponse>(key);
+
+    if (!oldData) return;
+    if (oldData.heroes.some(h => h.hero.id === arenaHero.hero.id)) return;
+
+    queryClient.setQueryData(key, {
+      ...oldData,
+      heroes: oldData.heroes.concat(arenaHero)
+    });
+  });
+
   return {
     getAll: () => apiHandler(apiClient.arena.getAll),
     getDetails: arenaId => apiHandler(apiClient.arena.getById, { params: { arenaId } }),
@@ -34,7 +49,7 @@ export const arenaApi = ({ queryClient, apiClient }: Dependencies): ArenaApi => 
         body: { heroId }
       });
 
-      queryClient.invalidateQueries(queryKeys.arena.detail(ref(arenaId)).queryKey);
+      // queryClient.invalidateQueries(queryKeys.arena.detail(ref(arenaId)).queryKey);
       queryClient.invalidateQueries(queryKeys.arena.list.queryKey);
 
       return result;

@@ -9,12 +9,14 @@ import {
 import { UseCase } from '../../../utils/helpers';
 import { Arena } from '../entities/arena.entity';
 import { ArenaRepository } from '../arena.repository';
-import { isLeft, left } from 'fp-ts/Either';
+import * as E from 'fp-ts/Either';
+import * as IO from 'fp-ts/IO';
+import { pipe } from 'fp-ts/function';
 import { User } from '../../user/user.entity';
 import { HeroRepository } from '../../hero/hero.repository';
 import { HeroAbilityBuilder } from '../../hero/hero.ability';
 import { UserAbilityBuilder } from '../../user/user.ability';
-import { Io } from '../../core/io';
+import { Emitter } from '../../core/event-emitter';
 
 export type JoinArenaUseCaseInput = {
   arenaId: UUID;
@@ -34,7 +36,7 @@ type Dependencies = {
   heroAbilityBuilder: HeroAbilityBuilder;
   userAbilityBuilder: UserAbilityBuilder;
   session: User;
-  io: Io;
+  emitter: Emitter;
 };
 
 export const joinArenaUseCase =
@@ -44,28 +46,35 @@ export const joinArenaUseCase =
     userAbilityBuilder,
     heroAbilityBuilder,
     session,
-    io
+    emitter
   }: Dependencies): JoinArenaUseCase =>
   async ({ arenaId, heroId }) => {
     const hero = await heroRepo.findById(heroId);
-    if (isLeft(hero)) return hero;
+    if (E.isLeft(hero)) return hero;
 
     const userAbility = userAbilityBuilder.buildFor(session);
     if (userAbility.cannot('edit', subject('Hero', hero.right))) {
-      return left(errorFactory.forbidden());
+      return E.left(errorFactory.forbidden());
     }
 
     const arena = await arenaRepo.findById(arenaId);
-    if (isLeft(arena)) return arena;
+    if (E.isLeft(arena)) return arena;
 
     const heroAbility = heroAbilityBuilder.buildFor(hero.right);
     if (heroAbility.cannot('join', subject('Arena', arena.right))) {
-      return left(errorFactory.forbidden());
+      return E.left(errorFactory.forbidden());
     }
 
     const position = {
       x: randomInt(arena.right.size),
       y: randomInt(arena.right.size)
     };
-    return await arenaRepo.join({ arenaId, heroId, position });
+
+    return pipe(
+      await arenaRepo.join({ arenaId, heroId, position }),
+      E.map(arena => {
+        emitter.emit('HERO_JOIND_ARENA', { arenaId, heroId });
+        return arena;
+      })
+    );
   };
