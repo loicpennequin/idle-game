@@ -14,6 +14,7 @@ import { User } from '../../user/user.entity';
 import { HeroRepository } from '../../hero/hero.repository';
 import { HeroAbilityBuilder } from '../../hero/hero.ability';
 import { UserAbilityBuilder } from '../../user/user.ability';
+import { Io } from '../../core/io';
 
 export type JoinArenaUseCaseInput = {
   arenaId: UUID;
@@ -33,6 +34,7 @@ type Dependencies = {
   heroAbilityBuilder: HeroAbilityBuilder;
   userAbilityBuilder: UserAbilityBuilder;
   session: User;
+  io: Io;
 };
 
 export const joinArenaUseCase =
@@ -41,7 +43,8 @@ export const joinArenaUseCase =
     heroRepo,
     userAbilityBuilder,
     heroAbilityBuilder,
-    session
+    session,
+    io
   }: Dependencies): JoinArenaUseCase =>
   async ({ arenaId, heroId }) => {
     const hero = await heroRepo.findById(heroId);
@@ -64,5 +67,5 @@ export const joinArenaUseCase =
       x: randomInt(arena.right.size),
       y: randomInt(arena.right.size)
     };
-    return arenaRepo.join({ arenaId, heroId, position });
+    return await arenaRepo.join({ arenaId, heroId, position });
   };

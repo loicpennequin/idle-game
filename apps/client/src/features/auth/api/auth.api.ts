@@ -27,6 +27,7 @@ export type AuthApi = {
   refreshJwt: () => Promise<RefreshJwtResponse['body']>;
   session: () => Promise<SessionResponse['body']>;
   init: () => Promise<TokenResponse>;
+  getToken: () => Nullable<{ accessToken: string }>;
 };
 
 export const REFRESH_ENDPOINT = authContract.refresh.path;
@@ -129,6 +130,7 @@ export const authApi = ({ apiClient, queryClient, http }: Dependencies): AuthApi
   };
 
   return {
+    getToken,
     refreshJwt,
 
     init() {

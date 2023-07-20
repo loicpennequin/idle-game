@@ -7,11 +7,13 @@ import { prisma } from './prisma';
 import { errorMapper } from './mappers/error.mapper';
 import { createIo } from './io';
 import { responseMapper } from './mappers/response.mapper';
+import { emitter } from './event-emitter';
 
 export const coreProviders = {
   server: asFunction(server, { lifetime: Lifetime.SINGLETON }),
   app: asFunction(createApp, { lifetime: Lifetime.SINGLETON }),
   io: asFunction(createIo, { lifetime: Lifetime.SINGLETON }),
+  emitter: asValue(emitter),
   corsMiddleware: asFunction(corsMiddleware),
   requestScopeMiddleware: asValue(requestScopeMiddleware),
   prisma: asValue(prisma),
