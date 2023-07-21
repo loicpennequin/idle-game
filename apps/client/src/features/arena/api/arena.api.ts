@@ -5,6 +5,7 @@ import type { ClientInferResponseBody } from '@ts-rest/core';
 import type { QueryClient } from '@tanstack/vue-query';
 import { queryKeys } from '@/features/core/queryKeys';
 import type { AppSocket } from '@/features/core/socket';
+import { arenaCacheUtils } from '../utils/cache-utils';
 
 export type JoinArenaResponse = ClientInferResponseBody<ArenaContract['join'], 200>;
 export type LeaveArenaResponse = ClientInferResponseBody<ArenaContract['leave'], 200>;
@@ -19,6 +20,7 @@ export type ArenaApi = {
   getDetails: (id: UUID) => Promise<GetArenaDetailsResponse>;
   join: (arg: { arenaId: string; heroId: string }) => Promise<JoinArenaResponse>;
   leave: (arg: { arenaId: string; heroId: string }) => Promise<LeaveArenaResponse>;
+  subscribe: () => () => void;
 };
 
 type Dependencies = {
@@ -27,19 +29,6 @@ type Dependencies = {
   socket: AppSocket;
 };
 export const arenaApi = ({ queryClient, apiClient, socket }: Dependencies): ArenaApi => {
-  socket.on('HERO_JOINED_ARENA', arenaHero => {
-    const key = queryKeys.arena.detail(ref(arenaHero.arenaId)).queryKey;
-    const oldData = queryClient.getQueryData<GetArenaDetailsResponse>(key);
-
-    if (!oldData) return;
-    if (oldData.heroes.some(h => h.hero.id === arenaHero.hero.id)) return;
-
-    queryClient.setQueryData(key, {
-      ...oldData,
-      heroes: oldData.heroes.concat(arenaHero)
-    });
-  });
-
   return {
     getAll: () => apiHandler(apiClient.arena.getAll),
     getDetails: arenaId => apiHandler(apiClient.arena.getById, { params: { arenaId } }),
@@ -64,6 +53,17 @@ export const arenaApi = ({ queryClient, apiClient, socket }: Dependencies): Aren
       queryClient.invalidateQueries(queryKeys.arena.list.queryKey);
 
       return result;
+    },
+    subscribe() {
+      const { addHeroToArena, removeHeroFromArena } = arenaCacheUtils(queryClient);
+
+      socket.on('HERO_JOINED_ARENA', addHeroToArena);
+      socket.on('HERO_LEFT_ARENA', removeHeroFromArena);
+
+      return () => {
+        socket.off('HERO_JOINED_ARENA', addHeroToArena);
+        socket.off('HERO_LEFT_ARENA', removeHeroFromArena);
+      };
     }
   };
 };

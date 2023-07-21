@@ -1,6 +1,6 @@
-import { Lifetime, asFunction } from 'awilix';
+import { asFunction } from 'awilix';
 import { arenaApi } from './api/arena.api';
 
 export const arenaProviders = {
-  arenaApi: asFunction(arenaApi, { lifetime: Lifetime.SINGLETON })
+  arenaApi: asFunction(arenaApi)
 };

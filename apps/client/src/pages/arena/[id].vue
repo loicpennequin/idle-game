@@ -5,8 +5,9 @@ import { definePage } from 'vue-router/auto';
 definePage({
   name: 'Arena'
 });
-
+const { arenaApi } = useContainer();
 const route = useRoute('Arena');
+
 const { data: session } = useSession();
 const { data: arena, suspense: arenaSuspense } = useArenaDetails(
   computed(() => route.params.id)
@@ -14,7 +15,6 @@ const { data: arena, suspense: arenaSuspense } = useArenaDetails(
 const { data: heroes, suspense: heroesSuspense } = useUserHeroes(
   computed(() => session.value?.id)
 );
-
 const { mutate: joinArena } = useJoinArena();
 const { mutate: leaveArena } = useLeaveArena();
 
@@ -26,6 +26,9 @@ const canJoin = (hero: HeroResponse) => {
     !arena.value.heroes.some(arenaHero => arenaHero.hero.id === hero.id)
   );
 };
+
+const unsub = arenaApi.subscribe();
+onBeforeUnmount(unsub);
 
 await Promise.all([arenaSuspense(), heroesSuspense()]);
 </script>
